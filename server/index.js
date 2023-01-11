@@ -15,3 +15,5 @@ const port = 3001;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
 });
+
+// console.log(JSON.stringify({ firstName: 'Gerry', lastName: 'Steffen', email: 'g_steffen@hotmail.com' } ))

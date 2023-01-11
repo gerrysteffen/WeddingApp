@@ -3,20 +3,25 @@
 import mongoose from './index.js';
 
 const eventSchema = new mongoose.Schema({
+  createdTimestamp: Date,
+  updatedTimestamp: Date,
   eventName: String,
-  users: [
+  date: Date,
+  participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'user'
-    }
+      ref: 'eventParticipation',
+    },
   ],
   description: String,
-  eventCommunication: [
+  eventComms: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'comms'
-    }
-  ]
+      ref: 'comm',
+    },
+  ],
 });
 
-export const Event = mongoose.model('event', eventSchema);
+const Event = mongoose.model('event', eventSchema);
+
+export default Event;

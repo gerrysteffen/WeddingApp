@@ -15,21 +15,14 @@ const userSchema = new mongoose.Schema({
     country: String,
     postalCode: String,
   },
-  events: [
+  eventParticipations: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'event'
-    }
-  ],
-  isOrganiser: Boolean,
-  isImportant: Boolean,
-  maxGuests: Number,
-  rsvp: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'rsvp'
-    }
+      ref: 'event',
+    },
   ],
 });
 
-export const User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
+
+export default User;

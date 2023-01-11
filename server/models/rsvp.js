@@ -3,23 +3,27 @@
 import mongoose from './index.js';
 
 const rsvpSchema = new mongoose.Schema({
-  user: {
+  eventParticipation: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'eventParticipation',
   },
   rsvpStatus: String,
   additionalGuests: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'user'
-    }
+      ref: 'user',
+    },
   ],
-  mealPreferences: [{
-    name: String,
-    applicable: Boolean,
-    comments: String,
-  }]
-
+  mealPreferences: [
+    {
+      name: String,
+      applicable: Boolean,
+      isOther: Boolean,
+      comments: String,
+    },
+  ],
 });
 
-export const RSVP = mongoose.model('rsvp', userSchema);
+const RSVP = mongoose.model('rsvp', rsvpSchema);
+
+export default RSVP;

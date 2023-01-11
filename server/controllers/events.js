@@ -1,10 +1,12 @@
 'use strict';
 
-import { Event } from '../models/events.js';
+import Event from '../models/events.js';
 
 const getAllEvents = async (req, res) => {
   try {
-    await Event.find({});
+    const events = await Event.find({});
+    res.status(200);
+    res.send(JSON.stringify(events));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -13,7 +15,12 @@ const getAllEvents = async (req, res) => {
 
 const getEvent = async (req, res) => {
   try {
-    await Event.find({ eventId: id });
+    const { _id } = req.body.event;
+    const event = await Event.find({ _id: _id })
+      .populate('eventComms')
+      .populate('participants');
+    res.status(200);
+    res.send(JSON.stringify(event));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -22,10 +29,12 @@ const getEvent = async (req, res) => {
 
 const createEvent = async (req, res) => {
   try {
-    await Event.create({
-      eventId,
-      eventName,
+    const { _id, ...eventInfo } = req.body.event;
+    const event = await Event.create({
+      ...eventInfo,
     });
+    res.status(201);
+    res.send(JSON.stringify(event));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -34,12 +43,14 @@ const createEvent = async (req, res) => {
 
 const updateEvent = async (req, res) => {
   try {
+    const { _id, ...eventInfo } = req.body.event;
     await Event.updateOne(
-      { eventId: eventId },
+      { _id: _id },
       {
-        eventName: eventName,
+        ...eventInfo,
       }
     );
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -48,7 +59,9 @@ const updateEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
   try {
-    await Event.deleteOne({ eventId: eventId });
+    const { _id } = req.body.event;
+    await Event.deleteOne({ _id: _id });
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -60,7 +73,7 @@ const EventController = {
   getEvent,
   createEvent,
   updateEvent,
-  deleteEvent
-}
+  deleteEvent,
+};
 
-export default EventController
+export default EventController;

@@ -1,10 +1,12 @@
 'use strict';
 
-import { User } from '../models/users.js';
+import User from '../models/users.js';
 
 const getAllUsers = async (req, res) => {
   try {
-    await User.find({});
+    const users = await User.find({});
+    res.status(200);
+    res.send(JSON.stringify(users));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -13,7 +15,10 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    await User.find({ userId: id });
+    const { _id } = req.body.user;
+    const user = await User.find({ _id: _id });
+    res.status(200);
+    res.send(JSON.stringify(user));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -22,10 +27,12 @@ const getUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    await User.create({
-      eventId,
-      eventName,
+    const { _id, ...userInfo } = req.body.user;
+    const user = await User.create({
+      ...userInfo,
     });
+    res.status(201);
+    res.send(JSON.stringify(user));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -34,12 +41,14 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    const { _id, ...userInfo } = req.body.user;
     await User.updateOne(
-      { userId: id },
+      { _id: _id },
       {
-        // eventName: eventName,
+        ...userInfo,
       }
     );
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -48,7 +57,9 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    await User.deleteOne({ userId: id });
+    const { _id } = req.body.user;
+    await User.deleteOne({ _id: _id });
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -60,7 +71,7 @@ const UserController = {
   getUser,
   createUser,
   updateUser,
-  deleteUser
-}
+  deleteUser,
+};
 
-export default UserController
+export default UserController;
