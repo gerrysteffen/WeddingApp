@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ * {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+#__next {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
