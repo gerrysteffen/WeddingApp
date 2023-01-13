@@ -7,10 +7,10 @@ const eventSchema = new mongoose.Schema({
   updatedTimestamp: Date,
   eventName: String,
   date: Date,
-  participants: [
+  invitations: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'eventParticipation',
+      ref: 'invitation',
     },
   ],
   description: String,

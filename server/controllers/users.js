@@ -1,10 +1,14 @@
 'use strict';
 
 import User from '../models/users.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+const SECRET_KEY = 'Hello world.';
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select('-password');;
     res.status(200);
     res.send(JSON.stringify(users));
   } catch (error) {
@@ -16,7 +20,7 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const { _id } = req.body.user;
-    const user = await User.find({ _id: _id });
+    const user = await User.find({ _id: _id }).select('-password');
     res.status(200);
     res.send(JSON.stringify(user));
   } catch (error) {
@@ -27,12 +31,31 @@ const getUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { _id, ...userInfo } = req.body.user;
-    const user = await User.create({
-      ...userInfo,
-    });
-    res.status(201);
-    res.send(JSON.stringify(user));
+    const { _id, email, password, ...userInfo } = req.body.user;
+    const previousUser = await User.findOne({ email: email });
+    if (previousUser) {
+      res.status(409);
+      res.send({ error: '409', message: 'User already exists' });
+    } else if (
+      !email ||
+      !password ||
+      !userInfo.firstName ||
+      !userInfo.lastName
+    ) {
+      res.status(400).send({
+        error: '400',
+        message: 'Could not create user - data missing',
+      });
+    } else {
+      const hash = await bcrypt.hash(password, 10);
+      const user = await User.create({
+        email,
+        password: hash,
+        ...userInfo,
+      });
+      const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
+      res.status(201).send({ accessToken });
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -49,6 +72,24 @@ const updateUser = async (req, res) => {
       }
     );
     res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body.user;
+    const user = await User.findOne({ email: email });
+    let validation 
+    if (user) validation = bcrypt.compare(password, user.password);
+    if (!validation) {
+      res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
+    } else if (validation) {
+      const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
+      res.status(200).send({ accessToken });
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -72,6 +113,7 @@ const UserController = {
   createUser,
   updateUser,
   deleteUser,
+  loginUser,
 };
 
 export default UserController;

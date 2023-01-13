@@ -2,7 +2,7 @@
 
 import mongoose from './index.js';
 
-const eventParticipationSchema = new mongoose.Schema({
+const invitationSchema = new mongoose.Schema({
   event: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'event',
@@ -13,23 +13,28 @@ const eventParticipationSchema = new mongoose.Schema({
   },
   isOrganiser: Boolean,
   isVIP: Boolean,
+  isPlusOne: Boolean,
   role: String,
-  maxGuests: Number,
-  guests: [
+  maxPlus: Number,
+  plusOnes: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
     },
   ],
+  invitedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
   rsvp: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'rsvp',
   },
 });
 
-const EventParticipation = mongoose.model(
-  'eventParticipation',
-  eventParticipationSchema
+const Invitation = mongoose.model(
+  'invitation',
+  invitationSchema
 );
 
-export default EventParticipation;
+export default Invitation;

@@ -17,13 +17,14 @@ router.post('/user', UserController.createUser);
 router.put('/user', UserController.updateUser);
 router.delete('/user', UserController.deleteUser);
 router.get('/users', UserController.getAllUsers);
+router.post('/login', UserController.loginUser);
 
-import EPController from './controllers/eventParticipations.js';
-router.get('/ep', EPController.getEP);
-router.post('/ep', EPController.createEP);
-router.put('/ep', EPController.updateEP);
-router.delete('/ep', EPController.deleteEP);
-router.get('/eps', EPController.getAllEPs);
+import InvitationController from './controllers/invitations.js';
+router.get('/ep', InvitationController.getInvitation);
+router.post('/ep', InvitationController.createInvitation);
+router.put('/ep', InvitationController.updateInvitation);
+router.delete('/ep', InvitationController.deleteInvitation);
+router.get('/eps', InvitationController.getAllInvitations);
 
 import RSVPController from './controllers/rsvp.js';
 router.get('/rsvp', RSVPController.getRSVP);

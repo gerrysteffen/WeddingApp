@@ -3,9 +3,9 @@
 import mongoose from './index.js';
 
 const rsvpSchema = new mongoose.Schema({
-  eventParticipation: {
+  invitation: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'eventParticipation',
+    ref: 'invitation',
   },
   rsvpStatus: String,
   additionalGuests: [
@@ -19,7 +19,7 @@ const rsvpSchema = new mongoose.Schema({
       name: String,
       applicable: Boolean,
       isOther: Boolean,
-      comments: String,
+      // comments: String,
     },
   ],
 });
