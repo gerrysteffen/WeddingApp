@@ -8,7 +8,7 @@ const SECRET_KEY = 'Hello world.';
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}).select('-password');;
+    const users = await User.find({}).select('-password');
     res.status(200);
     res.send(JSON.stringify(users));
   } catch (error) {
@@ -19,10 +19,19 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const { _id } = req.body.user;
-    const user = await User.find({ _id: _id }).select('-password');
-    res.status(200);
-    res.send(JSON.stringify(user));
+    let _id;
+    if (req.body.user) {
+      _id = req.body.user._id;
+    } else {
+      _id = req.user;
+    }
+    let user
+    if (_id) {
+      const userList = await User.find({ _id: _id }).select('-password');
+      user = userList[0]
+      user && res.status(200).send(JSON.stringify(user));
+    }
+    if (!_id || !user)res.status(406).send({error:'406', message: 'False request.'})
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -82,10 +91,12 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body.user;
     const user = await User.findOne({ email: email });
-    let validation 
+    let validation;
     if (user) validation = bcrypt.compare(password, user.password);
     if (!validation) {
-      res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
+      res
+        .status(401)
+        .send({ error: '401', message: 'Username or password is incorrect' });
     } else if (validation) {
       const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
       res.status(200).send({ accessToken });

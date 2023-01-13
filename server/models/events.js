@@ -5,12 +5,12 @@ import mongoose from './index.js';
 const eventSchema = new mongoose.Schema({
   createdTimestamp: Date,
   updatedTimestamp: Date,
-  eventName: String,
+  name: String,
   date: Date,
-  invitations: [
+  invites: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'invitation',
+      ref: 'invite',
     },
   ],
   description: String,

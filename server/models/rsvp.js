@@ -3,17 +3,15 @@
 import mongoose from './index.js';
 
 const rsvpSchema = new mongoose.Schema({
-  invitation: {
+  invite: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'invitation',
+    ref: 'invite',
   },
-  rsvpStatus: String,
-  additionalGuests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user',
-    },
-  ],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  attendanceStatus: String,
   mealPreferences: [
     {
       name: String,

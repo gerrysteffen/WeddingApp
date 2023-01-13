@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     postalCode: String,
     country: String,
   },
-  invitations: [
+  invites: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'invitation',
