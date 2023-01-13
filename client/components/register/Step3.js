@@ -2,8 +2,8 @@ import React from 'react';
 
 function Step3({ registration, step }) {
   return (
-    <div>
-      <div>
+    <>
+      <div className='h-full overflow-y-auto mb-24'>
         <div className='flex flex-row justify-between'>
           <div>First Name</div>
           <div>{registration.firstName}</div>
@@ -44,7 +44,7 @@ function Step3({ registration, step }) {
           <div>{registration.address.country}</div>
         </div>
       </div>
-      <div className='w-full flex flex-row justify-between'>
+      <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
         <button
           type='button'
           onClick={() => {
@@ -64,7 +64,7 @@ function Step3({ registration, step }) {
           Submit
         </button>
       </div>
-    </div>
+    </>
   );
 }
 

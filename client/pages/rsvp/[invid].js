@@ -2,14 +2,14 @@ import React from 'react';
 import RSVPindex from '.';
 import { useRouter } from 'next/router'
 
-function RSVPid(props) {
+function Invid(props) {
   const router = useRouter()
-  const { rsvpid } = router.query
+  const { invid } = router.query
   return (
     <>
-      <RSVPindex rsvpid={rsvpid} />
+      <RSVPindex invid={invid} />
     </>
   );
 }
 
-export default RSVPid;
+export default Invid;

@@ -14,9 +14,10 @@ function Step1({ registration, step }) {
   }
 
   return (
-    <div>
-      <form id='dataStep1' className='flex flex-col'>
-          <label className='mt-2 pl-2'>First Name</label>
+    <>
+      <div className='h-full overflow-y-auto mb-24'>
+        <form id='dataStep1' className='flex flex-col'>
+          <label className='pl-2'>First Name</label>
           <input value={firstName} onChange={(event)=>{setFirstName(event.target.value)}} type='text' placeholder='First Name' className='border border-black p-2'></input>
           <label className='mt-2 pl-2'>Last Name</label>
           <input value={lastName} onChange={(event)=>{setLastName(event.target.value)}} type='text' placeholder='Last Name' className='border border-black p-2'></input>
@@ -24,11 +25,12 @@ function Step1({ registration, step }) {
           <input value={email} onChange={(event)=>{setEmail(event.target.value)}} type='text' placeholder='Email' className='border border-black p-2'></input>
           <label  className='mt-2 pl-2'>Password</label>
           <input value={password} onChange={(event)=>{setPassword(event.target.value)}} type='text' placeholder='Password' className='border border-black p-2'></input>
-          <div className='w-full flex flex-row justify-end'>
-            <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className='mt-4 border border-black p-2 bg-slate-200 rounded'>Continue</button>
-          </div>
         </form>
-    </div>
+        <div className='w-full absolute right-6 bottom-10 flex flex-row justify-end'>
+          <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Continue</button>
+        </div>
+      </div>
+    </>
   );
 }
 

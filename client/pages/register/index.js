@@ -46,14 +46,16 @@ function RegIndex({userid}) {
         <title>Wedding App</title>
         <meta name="description" content="Wedding app" />
       </Head>
-      <div className='absolute top-10 left-10'>
-        <a href="./">Menu</a>
-      </div>
-      <div className='max-w-400 h-full flex flex-col justify-center m-auto'>
-        <h1 className='text-48px'>Register</h1>
-        {(step === 1) && <Step1 registration={registration} step={stepHandler} />}
-        {(step === 2) && <Step2 registration={registration} step={stepHandler} />}
-        {(step === 3) && <Step3 registration={registration} step={stepHandler} />}
+      <div className='relative max-w-400 h-full flex flex-col justify-center items-center mx-auto'>
+        {!userid && (<div className='absolute top-10 right-6'>
+          <a href="./">Menu</a>
+        </div>)}
+        <h1 className='absolute top-10 left-6 text-48px'>Register</h1>
+        <div className='absolute top-32 left-0 bottom-0 w-full flex flex-col px-6'>
+          {(step === 1) && <Step1 registration={registration} step={stepHandler} />}
+          {(step === 2) && <Step2 registration={registration} step={stepHandler} />}
+          {(step === 3) && <Step3 registration={registration} step={stepHandler} />}
+        </div>
       </div>
     </>
   );

@@ -20,9 +20,10 @@ function Step2({ registration, step }) {
   }
 
   return (
-    <div>
-      <form className='flex flex-col'>
-          <label className='mt-2 pl-2'>Address Line 1</label>
+    <>
+      <div className='h-full overflow-y-auto mb-24'>
+        <form className='flex flex-col'>
+          <label className='pl-2'>Address Line 1</label>
           <input value={addressLine1} onChange={(event)=>{setAddressLine1(event.target.value)}} type='text' placeholder='Street' className='border border-black p-2'></input>
           <label className='mt-2 pl-2'>Address Line 1</label>
           <input value={addressLine2} onChange={(event)=>{setAddressLine2(event.target.value)}} type='text' placeholder='Apartment, Suite, ...' className='border border-black p-2'></input>
@@ -34,12 +35,13 @@ function Step2({ registration, step }) {
           <input value={postalCode} onChange={(event)=>{setPostalCode(event.target.value)}} type='text' placeholder='Postal Code' className='border border-black p-2'></input>
           <label  className='mt-2 pl-2'>Country</label>
           <input value={country} onChange={(event)=>{setCountry(event.target.value)}} type='text' placeholder='Country' className='border border-black p-2'></input>
-          <div className='w-full flex flex-row justify-between'>
-            <button type='button' onClick={()=>{step.decrease()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Back</button>
-            <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Continue</button>
-          </div>
         </form>
-    </div>
+        <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
+          <button type='button' onClick={()=>{step.gatherData(data); step.decrease()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Back</button>
+          <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Continue</button>
+        </div>
+      </div>
+    </>
   );
 }
 

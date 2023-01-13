@@ -10,7 +10,11 @@ module.exports = {
         '400': '400px',
       },
       fontSize: {
+        '24px': '24px',
         '48px': '48px',
+      },
+      height: {
+        '128': '32rem',
       },
     },
   },
