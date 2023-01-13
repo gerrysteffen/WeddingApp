@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Step1 from '../../components/register/Step1';
 import Step2 from '../../components/register/Step2';
 import Step3 from '../../components/register/Step3';
+import apiCalls from '../../utils/apiCallService';
 
 function RegIndex({userid}) {
   const [step, setStep] = useState(1)
@@ -35,8 +36,10 @@ function RegIndex({userid}) {
       }
       setRegistration(newRegistration)
     },
-    submit: () => {
-      console.log(registration)
+    submit: async () => {
+      const res = await apiCalls.postUser(registration)
+      console.log(res)
+      // window.location.href = "./login";
     }
   }
 

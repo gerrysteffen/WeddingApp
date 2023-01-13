@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 function Step1({ registration, step }) {
   const [firstName, setFirstName] = useState(registration.firstName)
-  const [lastName, setLastName] = useState(registration.firstName)
-  const [email, setEmail] = useState(registration.firstName)
-  const [password, setPassword] = useState(registration.firstName)
+  const [lastName, setLastName] = useState(registration.lastName)
+  const [email, setEmail] = useState(registration.email)
+  const [password, setPassword] = useState(registration.password)
 
   const data = {
     firstName,
