@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 function Step1({ guests, step }) {
+  const [attendance, setAttendance] = useState('');
   const [numberOfGuests, setNumberOfGuests] = useState(guests.length - 1);
   const [guestInfo, setGuestInfo] = useState([{ firstName: '', lastName: '' }]);
   const [ready, setReady] = useState(false);
+  const [buttonDisabledStatus, setButtonStatus] = useState(true);
 
   useEffect(() => {
     setGuestInfo(guests);
@@ -27,16 +29,26 @@ function Step1({ guests, step }) {
   const maxGuests = 1;
 
   const handleFieldChange = (index, attribute, value) => {
+    toggleButtonStatus();
     const newGuestInfo = guestInfo.slice();
     newGuestInfo[index][attribute] = value;
     setGuestInfo(newGuestInfo);
+  };
+
+  const toggleButtonStatus = () => {
+    let disabled = false;
+    const fields = document.getElementById('rsvp-step1').elements;
+    for (let i=0; i<fields.length; i++) {
+      if (fields[i].value === '') disabled = true
+    }
+    setButtonStatus(disabled);
   };
 
   return (
     <>
       {ready && (
         <div className='h-full overflow-y-auto mb-24'>
-          <form className='flex flex-col '>
+          <form id='rsvp-step1' className='flex flex-col '>
             <label className='mt-2 pl-2'>First Name</label>
             <input
               value={guestInfo[0].firstName}
@@ -57,9 +69,21 @@ function Step1({ guests, step }) {
               placeholder='Last Name'
               className='border border-black p-2'
             ></input>
-
+            <div className='mt-2 pl-2'>Are you going to attend?</div>
+            <select
+              value={attendance}
+              onChange={(event) => {
+                setAttendance(event.target.value);
+              }}
+              className='w-full border border-black p-2 rounded'
+            >
+              <option value=''>Please let us know...</option>
+              <option value='Attending'>Attending</option>
+              <option value='Not Sure'>Not Sure</option>
+              <option value='Not Attending'>Not Attending</option>
+            </select>
             {/* Guest dropdown only shown if the invitee has plus ones available per invite */}
-            {maxGuests > 0 && (
+            {maxGuests > 0 && attendance !== '' && attendance !== 'Not Attending' && (
               <div>
                 <div className='mt-2 pl-2'>
                   How many guests would you like to bring
@@ -121,16 +145,16 @@ function Step1({ guests, step }) {
                   );
                 }
               })}
-
           </form>
           <div className='w-full absolute right-6 bottom-10 flex flex-row justify-end'>
             <button
               type='button'
               onClick={() => {
-                step.gatherData(guestInfo);
+                step.gatherData({guestInfo, attendance});
                 step.increase();
               }}
-              className='mt-4 border border-black p-2 bg-slate-200 rounded'
+              disabled={buttonDisabledStatus}
+              className='w-24 mt-4 border disabled:text-slate-400 text-black disabled:border-slate-400 border-black p-2 disabled:bg-slate-100 bg-slate-200 rounded'
             >
               Continue
             </button>

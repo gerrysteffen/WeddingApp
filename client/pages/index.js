@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -10,9 +10,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className='relative max-w-400 h-full w-auto flex flex-col justify-center items-left mx-auto'>
-        <a href='./login' className='text-48px mx-6'>Login</a>
-        <a href='./register' className='text-48px mt-8 mx-6'>Register</a>
-        <a href='./rsvp'className='text-48px mt-8 mx-6'>RSVP</a>
+        <Link href='./login' className='text-48px mx-6'>Login</Link>
+        <Link href='./register' className='text-48px mt-8 mx-6'>Register</Link>
+        <Link href='./rsvp'className='text-48px mt-8 mx-6'>RSVP</Link>
       </div>
     </>
   )

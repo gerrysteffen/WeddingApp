@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import apiCalls from '../../utils/apiCallService.js';
+import React, { use, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import apiCalls from '../../utils/apis/index.js';
 import auth from '../../utils/auth.js';
-
 
 function index(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const router = useRouter();
+
+  // BELOW: if there is a valid access token stored, redirect to app
+  useEffect(() => {
+    const initialSetup = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+      if (accessToken) {
+        const user = await apiCalls.getInitialUser(accessToken);
+        user && router.push('./app');
+      }
+    };
+    initialSetup();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -17,20 +31,16 @@ function index(props) {
       const { accessToken } = res;
       localStorage.setItem('accessToken', accessToken);
       // props.setIsAuthenticated(true);
-      auth.login(() => console.log('logged in'));
+      auth.login(() => router.push('./app'));
     }
     console.log(res);
   };
 
   return (
     <>
-      <Head>
-        <title>Wedding App</title>
-        <meta name='description' content='Wedding app' />
-      </Head>
       <div className='relative max-w-400 h-full flex flex-col justify-center items-center mx-auto'>
         <div className='absolute top-10 right-6'>
-          <a href='./'>Menu</a>
+          <Link href='./'>Menu</Link>
         </div>
         <h1 className='absolute top-10 left-6 text-48px'>Login</h1>
         <div className='absolute top-32 left-0 w-full flex flex-col px-6'>
