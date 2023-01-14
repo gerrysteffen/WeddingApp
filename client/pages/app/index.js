@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import apiCalls from '../../utils/apis/index.js';
 import CreateEvent from '../../components/app/CreateEvent.js';
@@ -6,33 +6,31 @@ import EventList from '../../components/app/EventList.js';
 import UserDashboard from '../../components/app/UserDashboard.js';
 import EventDashboard from '../../components/app/EventDashboard.js';
 import UserProfile from '../../components/app/UserProfile.js';
+import EventDetails from '../../components/app/EventDetails.js';
 
-function appIndex(props) {
+function appIndex() {
   const [accessToken, setAccessToken] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
   const [activeEvent, setActiveEvent] = useState(null);
   const [mode, setMode] = useState('userDashboard');
-  const [ready, setReady] = useState(false);
 
   const router = useRouter();
 
   // BELOW: if there is an access token stored get initial user information incl their events,
   // if no access token or no user for access token redirect to login
   useEffect(() => {
-    setReady(false)
     const initialSetup = async () => {
       const newAccessToken = localStorage.getItem('accessToken');
       setAccessToken(newAccessToken);
       if (!newAccessToken) {
         logout();
       } else {
-        const user = await apiCalls.getInitialUser(newAccessToken);
-        if (user) {
-          setCurrentUser(user);
+        const newUser = await apiCalls.getInitialUser(newAccessToken);
+        if (newUser) {
+          setUser(newUser);
           const userEvents = await apiCalls.getEvents(newAccessToken);
           setEvents(userEvents);
-          setReady(true)
         } else {
           logout();
         }
@@ -40,10 +38,6 @@ function appIndex(props) {
     };
     initialSetup();
   }, [mode]);
-
-  // useEffect(()=>{
-  //   setReady(true)
-  // },[events])
 
   // DRY logout function
   const logout = () => {
@@ -55,7 +49,7 @@ function appIndex(props) {
   // Object including the most important functions and information to navigate the app, passed down in each component
   const util = {
     accessToken: accessToken,
-    currentUser: currentUser,
+    user: user,
     setMode: setMode,
     setActiveEvent: setActiveEvent,
     logout: logout,
@@ -64,27 +58,37 @@ function appIndex(props) {
   // before the user info is retrieved, a loading wheel is displayed - after that the current mode decides what is shown
   return (
     <>
-      {(!ready && (mode !== 'eventDashboard' || events.length>0)) ? (
-        <div>Loading</div>
+      {!user ||
+      (mode.includes('event') && events.length === 0) ? (
+        <div>loading...</div>
       ) : (
         <div className='relative max-w-400 h-full flex flex-col justify-center items-center mx-auto'>
-          {mode === 'userDashboard' && (
-            <UserDashboard util={util} />
-          )}
-          {mode === 'userProfile' && (
-            <UserProfile util={util} />
-          )}
+          {mode === 'userDashboard' && <UserDashboard util={util} events={events} />}
+          {mode === 'userProfile' && <UserProfile util={util} />}
           {mode === 'createEvent' && <CreateEvent util={util} />}
           {mode === 'events' && (
             <EventList util={util} title='All Events' events={events} />
           )}
-          {mode === 'myEvents' && (
-            <EventList util={util} title='My Events' events={events.filter((event) => event.organisers.includes(currentUser._id)
+          {mode === 'myevents' && (
+            <EventList
+              util={util}
+              title='My Events'
+              events={events.filter((event) =>
+                event.organisers.includes(user._id)
               )}
             />
           )}
           {mode === 'eventDashboard' && (
-            <EventDashboard util={util} event={events.find((event)=>event._id === activeEvent)} />
+            <EventDashboard
+              util={util}
+              event={events.find((event) => event._id === activeEvent)}
+            />
+          )}
+          {mode === 'eventDetails' && (
+            <EventDetails
+              util={util}
+              event={events.find((event) => event._id === activeEvent)}
+            />
           )}
         </div>
       )}

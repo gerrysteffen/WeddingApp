@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Styles from '../../utils/styles';
 
 function Step0({ setInvitationId }) {
   const [invId, setinvId] = useState('')  
@@ -21,10 +22,10 @@ function Step0({ setInvitationId }) {
         <div className='w-full absolute right-6 bottom-10 flex flex-row justify-end'>
           <button
             type='button'
-            onClick={(event) => {
+            onClick={() => {
               setInvitationId(invId)
             }}
-            className='mt-4 border border-black p-2 bg-slate-200 rounded'
+            className={Styles.buttonShort}
           >
             Continue
           </button>

@@ -27,13 +27,13 @@ const userAPIs = {
     return res.json();
   },
 
-  updateUser: async (user) => {
+  updateUser: async (accessToken, user) => {
     const data = {
       user: {
+        _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        password: user.password,
         addressLine1: user.addressLine1,
         addressLine2: user.addressLine2,
         city: user.city,
@@ -46,7 +46,28 @@ const userAPIs = {
       method: 'PUT',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data)
+    }).catch((error) => console.log(error));
+    return res.json();
+  },
+
+  changePW: async (accessToken, user, oldPassword, newPassword) => {
+    const data = {
+      user: {
+        _id: user._id,
+        oldPassword,
+        newPassword,
+      }
+    }
+    const res = await fetch(url + '/changepw', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data)
     }).catch((error) => console.log(error));

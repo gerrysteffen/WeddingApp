@@ -1,4 +1,5 @@
 import React from 'react';
+import Styles from '../../utils/styles';
 
 function Step2({guests, step}) {
   return (
@@ -23,8 +24,8 @@ function Step2({guests, step}) {
             <label  className='mt-2 pl-2'>Country</label>
             <input value={country} onChange={(event)=>{setCountry(event.target.value)}} type='text' placeholder='Country' className='border border-black p-2'></input> */}
             <div className='w-full flex flex-row justify-between'>
-              <button type='button' onClick={()=>{step.decrease()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Back</button>
-              <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Continue</button>
+              <button type='button' onClick={()=>{step.decrease()}} className={Styles.buttonShort}>Back</button>
+              <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className={Styles.buttonShort}>Continue</button>
             </div>
           </form>
       {/* </div> */}

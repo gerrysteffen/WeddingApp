@@ -1,4 +1,5 @@
 import React from 'react';
+import Styles from '../../utils/styles';
 
 function Step3({ registration, step }) {
   return (
@@ -50,7 +51,7 @@ function Step3({ registration, step }) {
           onClick={() => {
             step.decrease();
           }}
-          className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonShort}
         >
           Back
         </button>
@@ -59,7 +60,7 @@ function Step3({ registration, step }) {
           onClick={() => {
             step.submit();
           }}
-          className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonShort}
         >
           Submit
         </button>

@@ -42,12 +42,10 @@ function RegIndex({userid}) {
     },
     submit: async () => {
       const res = await apiCalls.postUser(registration)
-      console.log(res)
       if (res.error) {
         console.log(res.message);
       } else {
         const { accessToken } = res;
-        console.log(accessToken)
         localStorage.setItem('accessToken', accessToken);
         auth.login(() => router.push('./app'));
       }

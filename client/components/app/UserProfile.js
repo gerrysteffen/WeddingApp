@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import apiCalls from '../../utils/apis';
 
 function UserProfile({ util }) {
-  const [user, setUser] = useState(util.currentUser);
+  const [userInfo, setUserInfo] = useState(util.user);
   const [editMode, setEditMode] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [passwordMode, setPasswordMode] = useState(false);
 
-  const displayedInfo = [
+  const infoKeys = [
     'firstName',
     'lastName',
     'email',
@@ -32,25 +32,60 @@ function UserProfile({ util }) {
     'Country',
   ];
 
+  const handleUserChange = (event) => {
+    setUserInfo({
+      ...userInfo,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleUserSubmit = async () => {
+    const res = await apiCalls.updateUser(util.accessToken, userInfo);
+    if (res.error) {
+      console.log(res.message);
+    } else {
+      setUserInfo(res);
+      util.user = res;
+      setEditMode(false);
+    }
+  };
+
+  const handlePasswordSubmit = async () => {
+    const res = await apiCalls.changePW(util.accessToken, util.user, oldPassword, newPassword);
+    if (res.error) {
+      console.log(res.message);
+    } else {
+      setOldPassword('')
+      setNewPassword('')
+      setPasswordMode(false)
+    }
+  };
+
   return (
     <>
       <h1 className='absolute top-10 left-6 text-48px'>My Profile</h1>
       <div className='absolute top-32 bottom-24 left-0 w-full flex flex-col px-6'>
-        {/* TOP PART: Information */}
-        {/* Case 1: User information display mode, not in Password Mode*/}
+        {/* TOP PART:  */}
+        {/* Case 1: User information, i.e. not in password mode*/}
         {!passwordMode ? (
           <>
-            {Object.keys(user).map((key) => {
-              if (user[key] && displayedInfo.includes(key)) {
+            {infoKeys.map((key, index) => {
+              if (userInfo[key]) {
                 return (
-                  <div className='h-14 flex flex-row justify-between items-center'>
-                    <div>{infoTitles[displayedInfo.indexOf(key)]}</div>
+                  <div
+                    key={key}
+                    className='h-14 flex flex-row justify-between items-center'
+                  >
+                    <div>{infoTitles[index]}</div>
+                    {/* Two possibilities: no edit mode -> User information static; edit mode -> user information in input fields*/}
                     {!editMode ? (
-                      <div>{user[key]}</div>
+                      <div>{userInfo[key]}</div>
                     ) : (
                       <input
                         type='text'
-                        value={user[key]}
+                        name={key}
+                        value={userInfo[key]}
+                        onChange={(event) => handleUserChange(event)}
                         className='border border-black p-2'
                       ></input>
                     )}
@@ -58,37 +93,10 @@ function UserProfile({ util }) {
                 );
               }
             })}
-
-            {/* Below code shows possibility to initiate password change - if updating of general information 
-            is in progress, the password field disappears and a submit button is shown instead */}
-
-            {!editMode ? (
-              <div className='h-14 flex flex-row justify-between items-center'>
-                <div>Password</div>
-                <button
-                  onClick={() => {
-                    setPasswordMode(!passwordMode);
-                  }}
-                  className='w-40 border border-black p-2 bg-slate-200 rounded'
-                >
-                  Change Password
-                </button>
-              </div>
-            ) : (
-              <div className='h-14 flex flex-row items-center'>
-                <button
-                  onClick={() => {
-                    setEditMode(!editMode);
-                  }}
-                  className='w-full border border-black p-2 bg-slate-200 rounded'
-                >
-                  Submit
-                </button>
-              </div>
-            )}
           </>
         ) : (
           <>
+            {/* Case 2: password  information, i.e. in password mode*/}
             <div className='h-14 flex flex-row justify-between items-center'>
               <div>Old Password</div>
               <input
@@ -111,22 +119,39 @@ function UserProfile({ util }) {
                 className='border border-black p-2'
               ></input>
             </div>
-            <div className='h-14 flex flex-row items-center'>
-              <button
-                onClick={() => {
-                  setPasswordMode(!passwordMode);
-                }}
-                className='w-full border border-black p-2 bg-slate-200 rounded'
-              >
-                Change Password
-              </button>
-            </div>
           </>
+        )}
+
+        {/* Below code shows possibility to initiate password change - if updating of general information 
+        or password is in progress, the password line disappears and a submit button is shown instead */}
+        {editMode || passwordMode ? (
+          <div className='h-14 flex flex-row items-center'>
+            <button
+              onClick={() => {
+                if (editMode) handleUserSubmit();
+                if (passwordMode) handlePasswordSubmit();
+              }}
+              className='w-full border border-black p-2 bg-slate-200 rounded'
+            >
+              Submit
+            </button>
+          </div>
+        ) : (
+          <div className='h-14 flex flex-row justify-between items-center'>
+            <div>Password</div>
+            <button
+              onClick={() => {
+                setPasswordMode(!passwordMode);
+              }}
+              className='w-40 border border-black p-2 bg-slate-200 rounded'
+            >
+              Change Password
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Below code for Dashboard navigation button and button to initiate/cancel updating of general information */}
-
+      {/* Below code for Dashboard navigation button and button to initiate/cancel updating of general information / exiting of pw mode*/}
       <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
         <button
           className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'
@@ -139,6 +164,7 @@ function UserProfile({ util }) {
         {editMode || passwordMode ? (
           <button
             onClick={() => {
+              setUserInfo(util.user);
               if (editMode) setEditMode(!editMode);
               if (passwordMode) setPasswordMode(!passwordMode);
             }}

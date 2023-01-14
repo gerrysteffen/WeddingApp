@@ -1,14 +1,20 @@
 import React from 'react';
+import Styles from '../../utils/styles';
 
-function UserDashboard({ util }) {
+function UserDashboard({ util, events }) {
   return (
     <>
       <h1 className='absolute top-10 left-6 text-48px'>
-        Hello {util.currentUser.firstName}
+        Hello {util.user.firstName}
       </h1>
       <div className='absolute top-32 left-0 w-full flex flex-col px-6'>
+      <div className='italic text-center'>
+          <div>
+            Browse your profile and events...
+          </div>
+        </div>
         <button
-          className='mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonLong}
           onClick={() => {
             util.setMode('userProfile');
           }}
@@ -16,7 +22,8 @@ function UserDashboard({ util }) {
           My Profile
         </button>
         <button
-          className='mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonLong}
+          disabled={(events.length>0) ? false : true}
           onClick={() => {
             util.setMode('events');
           }}
@@ -24,9 +31,10 @@ function UserDashboard({ util }) {
           Events
         </button>
         <button
-          className='mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonLong}
+          disabled={(events.length>0) ? false : true}
           onClick={() => {
-            util.setMode('myEvents');
+            util.setMode('myevents');
           }}
         >
           My Events
@@ -43,14 +51,14 @@ function UserDashboard({ util }) {
           </div>
         </div>
         <button
-          className='mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonLong}
           onClick={() => {
             util.setMode('createEvent');
           }}
         >
           Create Event
         </button>
-        <button className='mt-4 border border-black p-2 bg-slate-200 rounded'>
+        <button className={Styles.buttonLong}>
           Connect Event with Invite ID
         </button>
       </div>

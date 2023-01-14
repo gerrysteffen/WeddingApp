@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import apiCalls from '../../utils/apis/index.js';
 import auth from '../../utils/auth.js';
+import Styles from '../../utils/styles.js';
 
 function index(props) {
   const [email, setEmail] = useState('');
@@ -30,10 +31,8 @@ function index(props) {
     } else {
       const { accessToken } = res;
       localStorage.setItem('accessToken', accessToken);
-      // props.setIsAuthenticated(true);
       auth.login(() => router.push('./app'));
     }
-    console.log(res);
   };
 
   return (
@@ -72,7 +71,7 @@ function index(props) {
             ></input>
             <button
               type='submit'
-              className='mt-4 border border-black p-2 bg-slate-200 rounded'
+              className={Styles.buttonLong}
             >
               SUBMIT
             </button>

@@ -7,16 +7,16 @@ const eventAPIs = {
         name: event.name,
         date: event.date,
         description: event.description,
-      }
-    }
+      },
+    };
     const res = await fetch(url + '/event', {
       method: 'POST',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },
@@ -24,17 +24,17 @@ const eventAPIs = {
   getEvent: async (accessToken, eventId) => {
     const data = {
       event: {
-        _id: eventId
-      }
-    }
+        _id: eventId,
+      },
+    };
     const res = await fetch(url + '/event', {
       method: 'GET',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },
@@ -45,7 +45,7 @@ const eventAPIs = {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }).catch((error) => console.log(error));
     return res.json();
@@ -57,11 +57,33 @@ const eventAPIs = {
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }).catch((error) => console.log(error));
     return res.json();
   },
-}
 
-export default eventAPIs
+  updateEvent: async (accessToken, event) => {
+    const data = {
+      event: {
+        _id: event._id,
+        name: event.name,
+        description: event.description,
+        date: event.date,
+        organisers: event.organisers,
+      },
+    };
+    const res = await fetch(url + '/event', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.log(error));
+    return res.json();
+  },
+};
+
+export default eventAPIs;

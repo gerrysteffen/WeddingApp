@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Styles from '../../utils/styles';
 
 function Step1({ guests, step }) {
   const [attendance, setAttendance] = useState('');
@@ -154,7 +155,7 @@ function Step1({ guests, step }) {
                 step.increase();
               }}
               disabled={buttonDisabledStatus}
-              className='w-24 mt-4 border disabled:text-slate-400 text-black disabled:border-slate-400 border-black p-2 disabled:bg-slate-100 bg-slate-200 rounded'
+              className={Styles.buttonShort}
             >
               Continue
             </button>

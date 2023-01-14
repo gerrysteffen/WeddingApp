@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Styles from '../../utils/styles';
 
 function Step1({ registration, step }) {
   const [firstName, setFirstName] = useState(registration.firstName)
@@ -27,7 +28,7 @@ function Step1({ registration, step }) {
           <input value={password} onChange={(event)=>{setPassword(event.target.value)}} type='text' placeholder='Password' className='border border-black p-2'></input>
         </form>
         <div className='w-full absolute right-6 bottom-10 flex flex-row justify-end'>
-          <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Continue</button>
+          <button type='button' onClick={()=>{step.gatherData(data); step.increase()}} className={Styles.buttonShort}>Continue</button>
         </div>
       </div>
     </>
