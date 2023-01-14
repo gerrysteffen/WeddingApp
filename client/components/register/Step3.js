@@ -21,27 +21,27 @@ function Step3({ registration, step }) {
         </div>
         <div className='flex flex-row justify-between ml-2'>
           <div>Address Line 1</div>
-          <div>{registration.address.addressLine1}</div>
+          <div>{registration.addressLine1}</div>
         </div>
         <div className='flex flex-row justify-between ml-2'>
           <div>Address Line 2</div>
-          <div>{registration.address.addressLine2}</div>
+          <div>{registration.addressLine2}</div>
         </div>
         <div className='flex flex-row justify-between ml-2'>
           <div>City</div>
-          <div>{registration.address.city}</div>
+          <div>{registration.city}</div>
         </div>
         <div className='flex flex-row justify-between ml-2'>
           <div>State</div>
-          <div>{registration.address.state}</div>
+          <div>{registration.state}</div>
         </div>
         <div className='flex flex-row justify-between ml-2'>
           <div>Postal Code</div>
-          <div>{registration.address.postalCode}</div>
+          <div>{registration.postalCode}</div>
         </div>
         <div className='flex flex-row justify-between ml-2'>
           <div>Country</div>
-          <div>{registration.address.country}</div>
+          <div>{registration.country}</div>
         </div>
       </div>
       <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>

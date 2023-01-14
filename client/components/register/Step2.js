@@ -9,14 +9,12 @@ function Step2({ registration, step }) {
   const [country, setCountry] = useState(registration.address.country)
 
   const data = {
-    address: {
-      addressLine1,
-      addressLine2,
-      city,
-      state,
-      postalCode,
-      country,
-    }
+    addressLine1,
+    addressLine2,
+    city,
+    state,
+    postalCode,
+    country,
   }
 
   return (
@@ -25,7 +23,7 @@ function Step2({ registration, step }) {
         <form className='flex flex-col'>
           <label className='pl-2'>Address Line 1</label>
           <input value={addressLine1} onChange={(event)=>{setAddressLine1(event.target.value)}} type='text' placeholder='Street' className='border border-black p-2'></input>
-          <label className='mt-2 pl-2'>Address Line 1</label>
+          <label className='mt-2 pl-2'>Address Line 2</label>
           <input value={addressLine2} onChange={(event)=>{setAddressLine2(event.target.value)}} type='text' placeholder='Apartment, Suite, ...' className='border border-black p-2'></input>
           <label className='mt-2 pl-2'>City</label>
           <input value={city} onChange={(event)=>{setCity(event.target.value)}} type='text' placeholder='City' className='border border-black p-2'></input>

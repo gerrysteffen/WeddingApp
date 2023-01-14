@@ -1,74 +1,92 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import apiCalls from '../../utils/apis/index.js';
 import CreateEvent from '../../components/app/CreateEvent.js';
-import MyEvents from '../../components/app/MyEvents.js';
-import AllEvents from '../../components/app/AllEvents.js';
+import EventList from '../../components/app/EventList.js';
+import UserDashboard from '../../components/app/UserDashboard.js';
+import EventDashboard from '../../components/app/EventDashboard.js';
+import UserProfile from '../../components/app/UserProfile.js';
 
 function appIndex(props) {
+  const [accessToken, setAccessToken] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(null)
-  const [mode, setMode] = useState('main')
+  const [events, setEvents] = useState([]);
+  const [activeEvent, setActiveEvent] = useState(null);
+  const [mode, setMode] = useState('userDashboard');
+  const [ready, setReady] = useState(false);
 
   const router = useRouter();
 
-  // BELOW: if there is an access token stored get initial user information,
+  // BELOW: if there is an access token stored get initial user information incl their events,
   // if no access token or no user for access token redirect to login
   useEffect(() => {
+    setReady(false)
     const initialSetup = async () => {
       const newAccessToken = localStorage.getItem('accessToken');
-      setAccessToken(newAccessToken)
+      setAccessToken(newAccessToken);
       if (!newAccessToken) {
-        logout()
-      } else if (!currentUser) {
+        logout();
+      } else {
         const user = await apiCalls.getInitialUser(newAccessToken);
-        user ? setCurrentUser(user) : logout();
+        if (user) {
+          setCurrentUser(user);
+          const userEvents = await apiCalls.getEvents(newAccessToken);
+          setEvents(userEvents);
+          setReady(true)
+        } else {
+          logout();
+        }
       }
     };
     initialSetup();
-  }, []);
+  }, [mode]);
 
+  // useEffect(()=>{
+  //   setReady(true)
+  // },[events])
+
+  // DRY logout function
   const logout = () => {
-    localStorage.removeItem("accessToken")
-    setAccessToken(null)
-    router.push('./login')
-  }
+    localStorage.removeItem('accessToken');
+    setAccessToken(null);
+    router.push('./login');
+  };
 
+  // Object including the most important functions and information to navigate the app, passed down in each component
   const util = {
     accessToken: accessToken,
+    currentUser: currentUser,
     setMode: setMode,
-  }
+    setActiveEvent: setActiveEvent,
+    logout: logout,
+  };
 
+  // before the user info is retrieved, a loading wheel is displayed - after that the current mode decides what is shown
   return (
     <>
-      {currentUser ? (
+      {(!ready && (mode !== 'eventDashboard' || events.length>0)) ? (
+        <div>Loading</div>
+      ) : (
         <div className='relative max-w-400 h-full flex flex-col justify-center items-center mx-auto'>
-          {(mode === 'main') && (
-            <>
-              <h1 className='absolute top-10 left-6 text-48px'>Hello {currentUser.firstName}</h1>
-              <div className='absolute top-32 left-0 w-full flex flex-col px-6'>
-                <button className='mt-4 border border-black p-2 bg-slate-200 rounded' onClick={()=>{setMode('create')}}>Create Event</button>
-                <button className='mt-4 border border-black p-2 bg-slate-200 rounded'>Connect Event with Invite ID</button>
-                <button className='mt-4 border border-black p-2 bg-slate-200 rounded' onClick={()=>{setMode('events')}}>Events</button>
-                <button className='mt-4 border border-black p-2 bg-slate-200 rounded' onClick={()=>{setMode('myevents')}}>My Events</button>
-              </div>
-              <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-start'>
-                <button type='button' onClick={()=>{logout()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Logout</button>
-              </div>
-            </>
+          {mode === 'userDashboard' && (
+            <UserDashboard util={util} />
           )}
-          {(mode === 'create') && (
-            <CreateEvent util={util} />
+          {mode === 'userProfile' && (
+            <UserProfile util={util} />
           )}
-          {(mode === 'myevents') && (
-            <MyEvents util={util} />
+          {mode === 'createEvent' && <CreateEvent util={util} />}
+          {mode === 'events' && (
+            <EventList util={util} title='All Events' events={events} />
           )}
-          {(mode === 'events') && (
-            <AllEvents util={util} />
+          {mode === 'myEvents' && (
+            <EventList util={util} title='My Events' events={events.filter((event) => event.organisers.includes(currentUser._id)
+              )}
+            />
+          )}
+          {mode === 'eventDashboard' && (
+            <EventDashboard util={util} event={events.find((event)=>event._id === activeEvent)} />
           )}
         </div>
-      ) : (
-        <div>Loading</div>
       )}
     </>
   );

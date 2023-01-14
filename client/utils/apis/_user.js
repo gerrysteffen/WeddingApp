@@ -8,11 +8,42 @@ const userAPIs = {
         lastName: user.lastName,
         email: user.email,
         password: user.password,
-        address: user.address,
+        addressLine1: user.addressLine1,
+        addressLine2: user.addressLine2,
+        city: user.city,
+        state: user.state,
+        postalCode: user.postalCode,
+        country: user.country,
       }
     }
     const res = await fetch(url + '/user', {
       method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).catch((error) => console.log(error));
+    return res.json();
+  },
+
+  updateUser: async (user) => {
+    const data = {
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        password: user.password,
+        addressLine1: user.addressLine1,
+        addressLine2: user.addressLine2,
+        city: user.city,
+        state: user.state,
+        postalCode: user.postalCode,
+        country: user.country,
+      }
+    }
+    const res = await fetch(url + '/user', {
+      method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json'

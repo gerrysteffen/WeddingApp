@@ -3,7 +3,7 @@ import apiCalls from '../../utils/apis';
 
 function CreateEvent({util}) {
   const [name, setName] = useState('')
-  const [date, setDate] = useState(Date.now())
+  const [date, setDate] = useState('')
   const [description, setDescription] = useState('')
 
   const data = {
@@ -14,7 +14,8 @@ function CreateEvent({util}) {
 
   const handleSubmit = async () => {
     const res = await apiCalls.postEvent(util.accessToken, data)
-    console.log (res) 
+    util.setActiveEvent(res._id)
+    util.setMode('eventDashboard')
   }
 
   return (
@@ -31,7 +32,7 @@ function CreateEvent({util}) {
         </form>
       </div>
       <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
-        <button className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded' onClick={()=>{util.setMode('main')}}>Back</button>
+        <button className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded' onClick={()=>{util.setMode('userDashboard')}}>Dashboard</button>
         <button type='submit' onClick={()=>{handleSubmit()}} className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'>Create</button>
       </div>
     </>
