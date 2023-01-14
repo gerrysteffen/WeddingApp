@@ -12,15 +12,16 @@ router.put('/event', authMiddleware, EventController.updateEvent);
 router.delete('/event', authMiddleware, EventController.deleteEvent);
 router.get('/events', authMiddleware, EventController.getEvents); //! used
 router.get('/allevents', authMiddleware, EventController.getAllEvents);
-router.get('/myevents', authMiddleware, EventController.getMyEvents); //! used
+// router.get('/myevents', authMiddleware, EventController.getMyEvents);
 
 import UserController from './controllers/users.js';
 router.get('/user', authMiddleware, UserController.getUser); //! used
 router.post('/user', UserController.createUser); //! used
-router.put('/user', authMiddleware, UserController.updateUser);
+router.put('/user', authMiddleware, UserController.updateUser); //! used
 router.delete('/user', authMiddleware, UserController.deleteUser);
 router.get('/users', authMiddleware, UserController.getAllUsers);
 router.post('/login', UserController.loginUser); //! used
+router.put('/changepw', authMiddleware, UserController.changePassword); //! used
 
 import InviteController from './controllers/invites.js';
 router.get('/invite', InviteController.getInvite);

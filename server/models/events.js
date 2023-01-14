@@ -7,13 +7,19 @@ const eventSchema = new mongoose.Schema({
   updatedTimestamp: Date,
   name: String,
   date: Date,
+  description: String,
   invites: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'invite',
     },
   ],
-  description: String,
+  organisers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
   eventComms: [
     {
       type: mongoose.Schema.Types.ObjectId,

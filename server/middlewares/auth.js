@@ -3,6 +3,8 @@ import User from './../models/users.js';
 
 const SECRET_KEY = 'Hello world.';
 
+// Below code is strongly based on the auth-it-exercise master solution
+
 const authMiddleware = async (req, res, next) => {
   const authHeaders = req.headers['authorization'];
   if (!authHeaders) return res.sendStatus(403);

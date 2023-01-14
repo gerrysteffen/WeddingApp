@@ -7,14 +7,12 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
-  address: {
-    addressLine1: String,
-    addressLine2: String,
-    city: String,
-    state: String,
-    postalCode: String,
-    country: String,
-  },
+  addressLine1: String,
+  addressLine2: String,
+  city: String,
+  state: String,
+  postalCode: String,
+  country: String,
   invites: [
     {
       type: mongoose.Schema.Types.ObjectId,
