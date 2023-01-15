@@ -58,12 +58,29 @@ const getEvents = async (req, res) => {
 
 const getEvent = async (req, res) => {
   try {
-    const { _id } = req.body.event;
+    const _id = req.params.eventid;
     const event = await Event.findOne({ _id: _id })
       .populate('eventComms')
-      .populate('participants');
-    res.status(200);
-    res.send(JSON.stringify(event));
+      .populate([
+        {
+          path: 'invites',
+          model: 'invite',
+          populate: [
+            {
+              path: 'guests',
+              model: 'user'
+            },
+            {
+              path: 'mainGuest',
+              model: 'user',
+            },
+          ],
+        },{
+          path: 'eventComms',
+          model: 'comm'
+        }
+      ])
+    res.status(200).send(JSON.stringify(event));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

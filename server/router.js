@@ -6,10 +6,10 @@ import authMiddleware from './middlewares/auth.js';
 const router = express.Router();
 
 import EventController from './controllers/events.js';
-router.get('/event', authMiddleware, EventController.getEvent);
+router.get('/event/:eventid', authMiddleware, EventController.getEvent);
 router.post('/event', authMiddleware, EventController.createEvent); //! used
 router.put('/event', authMiddleware, EventController.updateEvent);
-router.delete('/event', authMiddleware, EventController.deleteEvent);
+router.delete('/event', authMiddleware, EventController.deleteEvent); //!used
 router.get('/events', authMiddleware, EventController.getEvents); //! used
 router.get('/allevents', authMiddleware, EventController.getAllEvents);
 // router.get('/myevents', authMiddleware, EventController.getMyEvents);
