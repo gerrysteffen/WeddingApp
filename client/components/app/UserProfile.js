@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import apiCalls from '../../utils/apis';
+import Styles from '../../utils/styles';
 
 function UserProfile({ util }) {
   const [userInfo, setUserInfo] = useState(util.user);
@@ -63,8 +64,8 @@ function UserProfile({ util }) {
 
   return (
     <>
-      <h1 className='absolute top-10 left-6 text-48px'>My Profile</h1>
-      <div className='absolute top-32 bottom-24 left-0 w-full flex flex-col px-6'>
+      <h1 className={Styles.title}>My Profile</h1>
+      <div className={Styles.bodyContainer}>
         {/* TOP PART:  */}
         {/* Case 1: User information, i.e. not in password mode*/}
         {!passwordMode ? (
@@ -152,9 +153,9 @@ function UserProfile({ util }) {
       </div>
 
       {/* Below code for Dashboard navigation button and button to initiate/cancel updating of general information / exiting of pw mode*/}
-      <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
+      <div className={Styles.buttonContainer}>
         <button
-          className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'
+          className={Styles.buttonShort}
           onClick={() => {
             util.setMode('userDashboard');
           }}
@@ -168,7 +169,7 @@ function UserProfile({ util }) {
               if (editMode) setEditMode(!editMode);
               if (passwordMode) setPasswordMode(!passwordMode);
             }}
-            className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'
+            className={Styles.buttonShort}
           >
             Cancel
           </button>
@@ -177,7 +178,7 @@ function UserProfile({ util }) {
             onClick={() => {
               setEditMode(!editMode);
             }}
-            className='w-24 mt-4 border border-black p-2 bg-slate-200 rounded'
+            className={Styles.buttonShort}
           >
             Edit
           </button>

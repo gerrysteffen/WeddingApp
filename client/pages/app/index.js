@@ -7,11 +7,14 @@ import UserDashboard from '../../components/app/UserDashboard.js';
 import EventDashboard from '../../components/app/EventDashboard.js';
 import UserProfile from '../../components/app/UserProfile.js';
 import EventDetails from '../../components/app/EventDetails.js';
+import EventParticipants from '../../components/app/EventParticipants.js';
+import InviteUsers from '../../components/app/InviteUsers.js';
 
 function appIndex() {
   const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
+  const [activeEventId, setActiveEventId] = useState(null);
   const [activeEvent, setActiveEvent] = useState(null);
   const [mode, setMode] = useState('userDashboard');
 
@@ -39,6 +42,17 @@ function appIndex() {
     initialSetup();
   }, [mode]);
 
+  useEffect(() => {
+    const getActiveEvent = async () => {
+      const newActiveEvent = await apiCalls.getEvent(
+        accessToken,
+        activeEventId
+      );
+      setActiveEvent(newActiveEvent);
+    };
+    if (activeEventId) getActiveEvent();
+  }, [activeEventId]);
+
   // DRY logout function
   const logout = () => {
     localStorage.removeItem('accessToken');
@@ -51,21 +65,22 @@ function appIndex() {
     accessToken: accessToken,
     user: user,
     setMode: setMode,
-    setActiveEvent: setActiveEvent,
+    setActiveEventId: setActiveEventId,
     logout: logout,
   };
 
   // before the user info is retrieved, a loading wheel is displayed - after that the current mode decides what is shown
   return (
     <>
-      {!user ||
-      (mode.includes('event') && events.length === 0) ? (
+      {!user || (mode.includes('event') && events.length === 0) ? (
         <div>loading...</div>
       ) : (
         <div className='relative max-w-400 h-full flex flex-col justify-center items-center mx-auto'>
-          {mode === 'userDashboard' && <UserDashboard util={util} events={events} />}
+          {mode === 'userDashboard' && (
+            <UserDashboard util={util} events={events} />
+          )}
           {mode === 'userProfile' && <UserProfile util={util} />}
-          {mode === 'createEvent' && <CreateEvent util={util} />}
+          {mode === 'create' && <CreateEvent util={util} />}
           {mode === 'events' && (
             <EventList util={util} title='All Events' events={events} />
           )}
@@ -81,13 +96,24 @@ function appIndex() {
           {mode === 'eventDashboard' && (
             <EventDashboard
               util={util}
-              event={events.find((event) => event._id === activeEvent)}
+              event={activeEvent}
             />
           )}
           {mode === 'eventDetails' && (
             <EventDetails
               util={util}
-              event={events.find((event) => event._id === activeEvent)}
+              event={activeEvent}
+            />
+          )}
+          {mode === 'eventParticipants' && (
+            <EventParticipants
+              util={util}
+              event={activeEvent}
+            />
+          )}
+          {mode === 'inviteUsers' && (
+            <InviteUsers
+              util={util}
             />
           )}
         </div>

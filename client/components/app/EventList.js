@@ -4,14 +4,14 @@ import Styles from '../../utils/styles';
 function EventList({ util, title, events }) {
   return (
     <>
-      <h1 className='absolute top-10 left-6 text-48px'>{title}</h1>
-      <div className='absolute top-32 bottom-24 left-0 w-full flex flex-col px-6'>
+      <h1 className={Styles.title}>{title}</h1>
+      <div className={Styles.bodyContainer}>
         {events.length > 0 ? (
           events.map((event) => (
             <button
               key={event._id}
               onClick={() => {
-                util.setActiveEvent(event._id);
+                util.setActiveEventId(event._id);
                 util.setMode('eventDashboard');
               }}
               className='mt-4 border border-black p-2 bg-slate-200 rounded'
@@ -23,7 +23,7 @@ function EventList({ util, title, events }) {
           <div>No events to display</div>
         )}
       </div>
-      <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
+      <div className={Styles.buttonContainer}>
         <button
           className={Styles.buttonShort}
           onClick={() => {

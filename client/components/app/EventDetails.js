@@ -30,8 +30,8 @@ function EventDetails({ event, util }) {
 
   return (
     <>
-      <h1 className='absolute top-10 left-6 text-48px'>Event Info</h1>
-      <div className='absolute top-32 bottom-24 left-0 w-full flex flex-col px-6'>
+      <h1 className={Styles.title}>Event Info</h1>
+      <div className={Styles.bodyContainer}>
         {infoKeys.map((key, index) => {
           if (eventInfo[key]) {
             return (
@@ -73,7 +73,7 @@ function EventDetails({ event, util }) {
       </div>
 
       {/* Below code for Dashboard navigation button and button to initiate/cancel updating of general information / exiting of pw mode*/}
-      <div className='absolute left-6 right-6 bottom-10 flex flex-row justify-between'>
+      <div className={Styles.buttonContainer}>
         <button
           className={Styles.buttonShort}
           onClick={() => {

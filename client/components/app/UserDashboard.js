@@ -4,10 +4,10 @@ import Styles from '../../utils/styles';
 function UserDashboard({ util, events }) {
   return (
     <>
-      <h1 className='absolute top-10 left-6 text-48px'>
+      <h1 className={Styles.title}>
         Hello {util.user.firstName}
       </h1>
-      <div className='absolute top-32 left-0 w-full flex flex-col px-6'>
+      <div className={Styles.bodyContainer}>
       <div className='italic text-center'>
           <div>
             Browse your profile and events...
@@ -53,7 +53,7 @@ function UserDashboard({ util, events }) {
         <button
           className={Styles.buttonLong}
           onClick={() => {
-            util.setMode('createEvent');
+            util.setMode('create');
           }}
         >
           Create Event
@@ -62,7 +62,7 @@ function UserDashboard({ util, events }) {
           Connect Event with Invite ID
         </button>
       </div>
-      <div className='absolute left-6 right-6 bottom-10'>
+      <div className={Styles.buttonContainer}>
         <button
           type='button'
           onClick={() => {

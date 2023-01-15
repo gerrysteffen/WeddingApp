@@ -22,19 +22,18 @@ const eventAPIs = {
   },
 
   getEvent: async (accessToken, eventId) => {
-    const data = {
-      event: {
-        _id: eventId,
-      },
-    };
-    const res = await fetch(url + '/event', {
+    // const data = {
+    //   event: {
+    //     _id: eventId,
+    //   },
+    // };
+    const res = await fetch(url + '/event/'+eventId, {
       method: 'GET',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },

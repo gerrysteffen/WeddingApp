@@ -8,6 +8,8 @@ module.exports = {
     extend: {
       maxWidth: {
         '400': '400px',
+        '600': '600px',
+        '800': '800px',
       },
       fontSize: {
         '24px': '24px',
