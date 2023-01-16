@@ -154,14 +154,6 @@ function UserProfile({ util }) {
 
       {/* Below code for Dashboard navigation button and button to initiate/cancel updating of general information / exiting of pw mode*/}
       <div className={Styles.buttonContainer}>
-        <button
-          className={Styles.buttonShort}
-          onClick={() => {
-            util.setMode('userDashboard');
-          }}
-        >
-          Dashboard
-        </button>
         {editMode || passwordMode ? (
           <button
             onClick={() => {
@@ -169,7 +161,7 @@ function UserProfile({ util }) {
               if (editMode) setEditMode(!editMode);
               if (passwordMode) setPasswordMode(!passwordMode);
             }}
-            className={Styles.buttonShort}
+            className={Styles.buttonLong}
           >
             Cancel
           </button>
@@ -178,7 +170,7 @@ function UserProfile({ util }) {
             onClick={() => {
               setEditMode(!editMode);
             }}
-            className={Styles.buttonShort}
+            className={Styles.buttonLong}
           >
             Edit
           </button>

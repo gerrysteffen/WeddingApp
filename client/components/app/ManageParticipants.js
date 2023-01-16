@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Styles from '../../utils/styles';
 
-function EventParticipants({ event }) {
+function ManageParticipants({ util, event }) {
   const [eventInvites, setEventInvites] = useState([]);
   const [eventParticipants, setEventParticipants] = useState([]);
 
@@ -28,7 +28,7 @@ function EventParticipants({ event }) {
 
   return (
     <>
-      <h1 className={Styles.title}>Participants</h1>
+      <h1 className={Styles.title}>Manage Participants</h1>
       <div className={Styles.bodyContainer}>
         {eventParticipants.map((participant) => {
           return (
@@ -46,4 +46,4 @@ function EventParticipants({ event }) {
   );
 }
 
-export default EventParticipants;
+export default ManageParticipants;

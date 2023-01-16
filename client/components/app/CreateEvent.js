@@ -33,8 +33,7 @@ function CreateEvent({util}) {
         </form>
       </div>
       <div className={Styles.buttonContainer}>
-        <button className={Styles.buttonShort} onClick={()=>{util.setMode('userDashboard')}}>Dashboard</button>
-        <button type='submit' onClick={()=>{handleSubmit()}} className={Styles.buttonShort}>Create</button>
+        <button type='submit' onClick={()=>{handleSubmit()}} className={Styles.buttonLong}>Create</button>
       </div>
     </>
   );

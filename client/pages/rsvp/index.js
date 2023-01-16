@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Step0 from '../../components/rsvp/Step0';
-import Step1 from '../../components/rsvp/Step1';
-import Step2 from '../../components/rsvp/Step2';
-import Step3 from '../../components/rsvp/Step3';
+import Step0 from '../../components/rsvp/Step0.js';
+import Step1 from '../../components/rsvp/Step1.js';
+import Step2 from '../../components/rsvp/Step2.js';
+import Step3 from '../../components/rsvp/Step3.js';
+import apiCalls from '../../utils/apis/index.js';
 
 function RSVPindex({ invid }) {
   const [step, setStep] = useState(1);
-  const [guests, setGuests] = useState([{}]);
+  const [guests, setGuests] = useState(null);
   const [rsvp, setRSVP] = useState({});
-  const [invitation, setInvitation] = useState();
-  const [invitationId, setInvitationId] = useState('');
+  const [invite, setInvite] = useState(null);
 
   useEffect(()=>{
-    invid && setInvitationId(invid)
+    const getInvite = async () => {
+      const res = await apiCalls.getInvite(invid)
+      if (res.error) {
+        console.log(res.message)
+      } else {
+        setInvite(res)
+      }
+    }
+    invid && getInvite()
   },[invid])
 
   useEffect(()=>{
-    const getInvitation = async () => {
-      const invite = {} 
-      setInterval(()=>{
-        setInvitation(invite)
-      },5000)
-    }
-    getInvitation()
-  },[invitationId])
+    if (invite) setGuests(invite.guests)
+  },[invite])
 
   const stepHandler = {
     increase: () => {
@@ -59,14 +61,14 @@ function RSVPindex({ invid }) {
         )}
         <h1 className='absolute top-10 left-6 text-48px'>RSVP</h1>
         <div className='absolute top-32 left-0 bottom-0 w-full flex flex-col px-6'>
-          {invitation ? (
+          {(invite && guests) ? (
             <>
-              {step === 1 && <Step1 guests={guests} step={stepHandler} />}
+              {step === 1 && <Step1 guests={guests} invite={invite} step={stepHandler} />}
               {step === 2 && <Step2 guests={guests} step={stepHandler} />}
               {step === 3 && <Step3 guests={guests} step={stepHandler} />}
             </>
           ) : (
-            <Step0 setInvitationId={setInvitationId} />
+            <Step0 invid={invid} setInvite={setInvite}/>
           )}
         </div>
       </div>

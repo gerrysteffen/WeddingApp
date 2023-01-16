@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Styles from '../../utils/styles';
 
-function Step1({ guests, step }) {
-  const [attendance, setAttendance] = useState('');
+function Step1({ guests, invite, step }) {
+  const [attendance, setAttendance] = useState(invite.attendanceStatus);
   const [numberOfGuests, setNumberOfGuests] = useState(guests.length - 1);
-  const [guestInfo, setGuestInfo] = useState([{ firstName: '', lastName: '' }]);
+  const [guestInfo, setGuestInfo] = useState(invite.guests);
   const [ready, setReady] = useState(false);
   const [buttonDisabledStatus, setButtonStatus] = useState(true);
 
@@ -27,8 +27,6 @@ function Step1({ guests, step }) {
     }
   }, [numberOfGuests]);
 
-  const maxGuests = 1;
-
   const handleFieldChange = (index, attribute, value) => {
     toggleButtonStatus();
     const newGuestInfo = guestInfo.slice();
@@ -38,10 +36,10 @@ function Step1({ guests, step }) {
 
   const toggleButtonStatus = () => {
     let disabled = false;
-    const fields = document.getElementById('rsvp-step1').elements;
-    for (let i=0; i<fields.length; i++) {
-      if (fields[i].value === '') disabled = true
+    for (let i = 0; i<Number(document.getElementById('numberOfGuestsField').value); i++) {
+      if (!guests[i] || guests[i].firstName === '' || guests[i].firstName === '' ) disabled=true
     }
+    if (document.getElementById('attendanceField').value==='No response') disabled=true
     setButtonStatus(disabled);
   };
 
@@ -72,37 +70,41 @@ function Step1({ guests, step }) {
             ></input>
             <div className='mt-2 pl-2'>Are you going to attend?</div>
             <select
+              id='attendanceField'
               value={attendance}
               onChange={(event) => {
                 setAttendance(event.target.value);
+                toggleButtonStatus()
               }}
               className='w-full border border-black p-2 rounded'
             >
-              <option value=''>Please let us know...</option>
+              <option value='No Response'>Please let us know...</option>
               <option value='Attending'>Attending</option>
               <option value='Not Sure'>Not Sure</option>
               <option value='Not Attending'>Not Attending</option>
             </select>
             {/* Guest dropdown only shown if the invitee has plus ones available per invite */}
-            {maxGuests > 0 && attendance !== '' && attendance !== 'Not Attending' && (
+            {invite.maxAddGuests > 0 && attendance !== '' && attendance !== 'Not Attending' && (
               <div>
                 <div className='mt-2 pl-2'>
                   How many guests would you like to bring
                 </div>
                 <select
+                  id='numberOfGuestsField'
                   value={numberOfGuests}
                   onChange={(event) => {
                     setNumberOfGuests(Number(event.target.value));
+                    toggleButtonStatus()
                   }}
                   className='w-full border border-black p-2 rounded'
                 >
-                  <option>0</option>
-                  {maxGuests >= 1 && <option>1</option>}
-                  {maxGuests >= 2 && <option>2</option>}
-                  {maxGuests >= 3 && <option>3</option>}
-                  {maxGuests >= 4 && <option>4</option>}
-                  {maxGuests >= 5 && <option>5</option>}
-                  {maxGuests >= 6 && <option>6</option>}
+                  <option value='0'>0</option>
+                  {invite.maxAddGuests >= 1 && <option value='1'>1</option>}
+                  {invite.maxAddGuests >= 2 && <option value='2'>2</option>}
+                  {invite.maxAddGuests >= 3 && <option value='3'>3</option>}
+                  {invite.maxAddGuests >= 4 && <option value='4'>4</option>}
+                  {invite.maxAddGuests >= 5 && <option value='5'>5</option>}
+                  {invite.maxAddGuests >= 6 && <option value='6'>6</option>}
                 </select>
               </div>
             )}

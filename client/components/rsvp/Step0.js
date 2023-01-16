@@ -1,8 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
 
-function Step0({ setInvitationId }) {
+function Step0({ invid, setInvite }) {
   const [invId, setinvId] = useState('')  
+
+  useEffect(()=>{
+    setinvId(invid)
+  },[invid])
+
+  const handleSubmit = async (invId) => {
+    const res = await apiCalls.getInvite(invId)
+    if (res.error) {
+      console.log(res.message)
+    } else {
+      setInvite(res)
+    }
+  }
 
   return (
     <>
@@ -23,7 +37,7 @@ function Step0({ setInvitationId }) {
           <button
             type='button'
             onClick={() => {
-              setInvitationId(invId)
+              handleSubmit(invId)
             }}
             className={Styles.buttonShort}
           >

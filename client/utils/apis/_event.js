@@ -1,4 +1,4 @@
-const url = 'http://localhost:3001';
+import ServerURL from "./serverUrl";
 
 const eventAPIs = {
   postEvent: async (accessToken, event) => {
@@ -9,7 +9,7 @@ const eventAPIs = {
         description: event.description,
       },
     };
-    const res = await fetch(url + '/event', {
+    const res = await fetch(ServerURL + '/event', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -22,12 +22,7 @@ const eventAPIs = {
   },
 
   getEvent: async (accessToken, eventId) => {
-    // const data = {
-    //   event: {
-    //     _id: eventId,
-    //   },
-    // };
-    const res = await fetch(url + '/event/'+eventId, {
+    const res = await fetch(ServerURL + '/event/'+eventId, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -39,7 +34,7 @@ const eventAPIs = {
   },
 
   getEvents: async (accessToken) => {
-    const res = await fetch(url + '/events', {
+    const res = await fetch(ServerURL + '/events', {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -51,7 +46,7 @@ const eventAPIs = {
   },
 
   getMyEvents: async (accessToken) => {
-    const res = await fetch(url + '/myevents', {
+    const res = await fetch(ServerURL + '/myevents', {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -72,7 +67,7 @@ const eventAPIs = {
         organisers: event.organisers,
       },
     };
-    const res = await fetch(url + '/event', {
+    const res = await fetch(ServerURL + '/event', {
       method: 'PUT',
       mode: 'cors',
       headers: {

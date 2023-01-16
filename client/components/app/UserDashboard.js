@@ -25,7 +25,7 @@ function UserDashboard({ util, events }) {
           className={Styles.buttonLong}
           disabled={(events.length>0) ? false : true}
           onClick={() => {
-            util.setMode('events');
+            util.setMode('userEvents');
           }}
         >
           Events
@@ -34,7 +34,7 @@ function UserDashboard({ util, events }) {
           className={Styles.buttonLong}
           disabled={(events.length>0) ? false : true}
           onClick={() => {
-            util.setMode('myevents');
+            util.setMode('userMyEvents');
           }}
         >
           My Events
@@ -53,12 +53,14 @@ function UserDashboard({ util, events }) {
         <button
           className={Styles.buttonLong}
           onClick={() => {
-            util.setMode('create');
+            util.setMode('userCreate');
           }}
         >
           Create Event
         </button>
-        <button className={Styles.buttonLong}>
+        <button className={Styles.buttonLong} onClick={() => {
+            util.setMode('connectInviteId');
+          }}>
           Connect Event with Invite ID
         </button>
       </div>

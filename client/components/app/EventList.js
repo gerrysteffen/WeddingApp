@@ -23,16 +23,6 @@ function EventList({ util, title, events }) {
           <div>No events to display</div>
         )}
       </div>
-      <div className={Styles.buttonContainer}>
-        <button
-          className={Styles.buttonShort}
-          onClick={() => {
-            util.setMode('userDashboard');
-          }}
-        >
-          Dashboard
-        </button>
-      </div>
     </>
   );
 }

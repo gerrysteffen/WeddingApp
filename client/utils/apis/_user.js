@@ -1,4 +1,4 @@
-const url = 'http://localhost:3001';
+import ServerURL from './serverUrl';
 
 const userAPIs = {
   postUser: async (user) => {
@@ -14,15 +14,15 @@ const userAPIs = {
         state: user.state,
         postalCode: user.postalCode,
         country: user.country,
-      }
-    }
-    const res = await fetch(url + '/user', {
+      },
+    };
+    const res = await fetch(ServerURL + '/user', {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },
@@ -40,16 +40,16 @@ const userAPIs = {
         state: user.state,
         postalCode: user.postalCode,
         country: user.country,
-      }
-    }
-    const res = await fetch(url + '/user', {
+      },
+    };
+    const res = await fetch(ServerURL + '/user', {
       method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },
@@ -60,16 +60,16 @@ const userAPIs = {
         _id: user._id,
         oldPassword,
         newPassword,
-      }
-    }
-    const res = await fetch(url + '/changepw', {
+      },
+    };
+    const res = await fetch(ServerURL + '/changepw', {
       method: 'PUT',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },
@@ -79,31 +79,31 @@ const userAPIs = {
       user: {
         email: user.email,
         password: user.password,
-      }
-    }
-    const res = await fetch(url + '/login', {
+      },
+    };
+    const res = await fetch(ServerURL + '/login', {
       method: 'POST',
       mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).catch((error) => console.log(error));
     return res.json();
   },
 
   getInitialUser: async (accessToken) => {
-    const res = await fetch(url + '/user', {
+    const res = await fetch(ServerURL + '/user', {
       method: 'GET',
       // credentials: 'include',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     }).catch((error) => console.log(error));
     return res.json();
   },
-}
+};
 
-export default userAPIs
+export default userAPIs;

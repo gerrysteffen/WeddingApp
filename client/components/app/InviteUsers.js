@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
 
 function InviteUsers({ util }) {
@@ -6,11 +7,10 @@ function InviteUsers({ util }) {
     firstName: 'First Name',
     lastName: 'Last Name',
     email: 'Email',
-    role: 'Role',
     maxAddGuests: 'How many plus ones allowed?',
   };
 
-  let emptyInvite = {...inviteTemplate};
+  let emptyInvite = { ...inviteTemplate };
   Object.keys(inviteTemplate).forEach((key) => (emptyInvite[key] = ''));
 
   const [inviteMode, setInviteMode] = useState('main');
@@ -33,23 +33,30 @@ function InviteUsers({ util }) {
     setCurrentIndex(newInvites.length);
   };
 
-  const handleEdit = (key) => {
-    setCurrentIndex(key);
-    setCurrentInvite(invites[key]);
+  const handleEdit = (index) => {
+    setCurrentIndex(index);
+    setCurrentInvite(invites[index]);
   };
 
-  const handleDelete = (key) => {
-    console.log('delete');
+  const handleDelete = (index) => {
+    const newInvites = invites.slice();
+    newInvites.splice(index, 1);
+    setInvites(newInvites);
   };
 
-  const handleSubmit = (key) => {
-    console.log('submit');
+  const handleSubmit = async () => {
+    const res = await apiCalls.postInvites(
+      util.accessToken,
+      invites,
+      util.activeEventId
+    );
+    console.log(res);
   };
 
   return (
     <>
       <h1 className={Styles.title}>Invite Users</h1>
-      <div className={Styles.bodyContainer}>
+      <div className={Styles.bodyContainerLong}>
         {inviteMode === 'main' && (
           <>
             <button
@@ -89,51 +96,46 @@ function InviteUsers({ util }) {
                 </div>
               ))}
             </form>
-            <div>
-              {invites.length > 0 &&
+            <button
+              onClick={() => {
+                handleAdd();
+              }}
+              className={Styles.buttonLong}
+            >
+              Add
+            </button>
+            <div className='mt-8 mx-2'>
+              <div className='font-bold'>Invites staged for submission</div>
+              {invites.length > 0 ? (
                 invites.map((invite, index) => (
                   <div key={index} className='flex flex-row justify-between'>
                     <div>{invite.firstName + ' ' + invite.lastName}</div>
-                    <button onClick={() => handleEdit(index)}>Edit</button>
-                    <button onClick={() => handleDelete(index)}>Delete</button>
+                    <div>
+                      <button
+                        className='mr-2'
+                        onClick={() => handleEdit(index)}
+                      >
+                        Edit
+                      </button>
+                      <button onClick={() => handleDelete(index)}>
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <div>No staged invites</div>
+              )}
             </div>
           </div>
         )}
       </div>
       <div className={Styles.buttonContainer}>
-        {inviteMode === 'main' ? (
-          <button
-            className={Styles.buttonShort}
-            onClick={() => {
-              util.setMode('userDashboard');
-            }}
-          >
-            Dashboard
-          </button>
-        ) : (
-          <button
-            className={Styles.buttonShort}
-            onClick={() => {
-              setInviteMode('main');
-            }}
-          >
-            Back
-          </button>
-        )}
         {inviteMode === 'manual' && (
           <>
             <button
-              onClick={() => {
-                handleAdd();
-              }}
-              className={Styles.buttonShort}
-            >
-              Add
-            </button>
-            <button
-              className={Styles.buttonShort}
+              className={Styles.buttonLong}
+              disabled={!invites.length > 0}
               onClick={() => {
                 handleSubmit();
               }}

@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./utils/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -13,6 +14,7 @@ module.exports = {
       },
       fontSize: {
         '24px': '24px',
+        '36px': '36px',
         '48px': '48px',
       },
       height: {
