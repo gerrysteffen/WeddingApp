@@ -8,6 +8,14 @@ const eventSchema = new mongoose.Schema({
   name: String,
   date: Date,
   description: String,
+  fiance1: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  fiance2: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
   invites: [
     {
       type: mongoose.Schema.Types.ObjectId,

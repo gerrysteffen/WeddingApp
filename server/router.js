@@ -6,29 +6,30 @@ import authMiddleware from './middlewares/auth.js';
 const router = express.Router();
 
 import EventController from './controllers/events.js';
-router.get('/event/:eventid', authMiddleware, EventController.getEvent);
+router.get('/event/:eventid', authMiddleware, EventController.getEvent);//!used
 router.post('/event', authMiddleware, EventController.createEvent); //! used
 router.put('/event', authMiddleware, EventController.updateEvent);
-router.delete('/event', authMiddleware, EventController.deleteEvent); //!used
+router.delete('/event', authMiddleware, EventController.deleteEvent);
 router.get('/events', authMiddleware, EventController.getEvents); //! used
-router.get('/allevents', authMiddleware, EventController.getAllEvents);
+// router.get('/allevents', authMiddleware, EventController.getAllEvents);
 // router.get('/myevents', authMiddleware, EventController.getMyEvents);
 
 import UserController from './controllers/users.js';
 router.get('/user', authMiddleware, UserController.getUser); //! used
 router.post('/user', UserController.createUser); //! used
 router.put('/user', authMiddleware, UserController.updateUser); //! used
-router.delete('/user', authMiddleware, UserController.deleteUser);
-router.get('/users', authMiddleware, UserController.getAllUsers);
+// router.delete('/user', authMiddleware, UserController.deleteUser);
+// router.get('/users', authMiddleware, UserController.getAllUsers);
 router.post('/login', UserController.loginUser); //! used
 router.put('/changepw', authMiddleware, UserController.changePassword); //! used
 
 import InviteController from './controllers/invites.js';
-router.get('/invite', InviteController.getInvite);
-router.post('/invite', InviteController.createInvite);
-router.put('/invite', InviteController.updateInvite);
+router.get('/invite/:invid', InviteController.getInvite); //! used
+// router.post('/invite', InviteController.createInvite);
+router.post('/invites', authMiddleware, InviteController.createInvites); //! used
+// router.put('/invite', InviteController.updateInvite);
 router.delete('/invite', InviteController.deleteInvite);
-router.get('/invites', InviteController.getAllInvites);
+// router.get('/invites', InviteController.getAllInvites);
 
 import RSVPController from './controllers/rsvp.js';
 router.get('/rsvp', RSVPController.getRSVP);

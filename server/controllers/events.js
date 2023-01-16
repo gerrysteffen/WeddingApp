@@ -60,7 +60,7 @@ const getEvent = async (req, res) => {
   try {
     const _id = req.params.eventid;
     const event = await Event.findOne({ _id: _id })
-      .populate('eventComms')
+      // .populate('eventComms')
       .populate([
         {
           path: 'invites',
