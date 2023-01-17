@@ -8,25 +8,20 @@ import apiCalls from '../../utils/apis/index.js';
 
 function RSVPindex({ invid }) {
   const [step, setStep] = useState(1);
-  const [guests, setGuests] = useState(null);
-  const [rsvp, setRSVP] = useState({});
   const [invite, setInvite] = useState(null);
+  const [rsvp, setRSVP] = useState({});
 
-  useEffect(()=>{
+  useEffect(() => {
     const getInvite = async () => {
-      const res = await apiCalls.getInvite(invid)
+      const res = await apiCalls.getInvite(invid);
       if (res.error) {
-        console.log(res.message)
+        console.log(res.message);
       } else {
-        setInvite(res)
+        setInvite(res);
       }
-    }
-    invid && getInvite()
-  },[invid])
-
-  useEffect(()=>{
-    if (invite) setGuests(invite.guests)
-  },[invite])
+    };
+    invid && getInvite();
+  }, [invid]);
 
   const stepHandler = {
     increase: () => {
@@ -35,18 +30,19 @@ function RSVPindex({ invid }) {
     decrease: () => {
       setStep(step - 1);
     },
-    gatherData: (data) => {
-      const {guestInfo, attendance} = data
-      const newGuests = guests.splice();
-      for (let i = 0; i < data.length; i++) {
-        newGuests[i] = {
-          ...guestInfo[i],
-        };
+    gatherData: (inviteData, rsvpData) => {
+      if (inviteData) {
+        const newInvite = { ...invite };
+        newInvite.guests = inviteData.guests;
+        newInvite.attendanceStatus = inviteData.attendanceStatus;
+        setInvite(newInvite);
       }
-      console.log(newGuests);
-      setGuests(newGuests);
+      if (rsvpData) {
+        setRSVP(rsvpData);
+      }
     },
     submit: () => {
+      console.log(invite);
       console.log(rsvp);
     },
   };
@@ -61,14 +57,14 @@ function RSVPindex({ invid }) {
         )}
         <h1 className='absolute top-10 left-6 text-48px'>RSVP</h1>
         <div className='absolute top-32 left-0 bottom-0 w-full flex flex-col px-6'>
-          {(invite && guests) ? (
+          {invite && invite.guests ? (
             <>
-              {step === 1 && <Step1 guests={guests} invite={invite} step={stepHandler} />}
-              {step === 2 && <Step2 guests={guests} step={stepHandler} />}
-              {step === 3 && <Step3 guests={guests} step={stepHandler} />}
+              {step === 1 && <Step1 invite={invite} step={stepHandler} />}
+              {step === 2 && <Step2 invite={invite} rsvp={rsvp} step={stepHandler} />}
+              {step === 3 && <Step3 invite={invite} rsvp={rsvp} step={stepHandler} />}
             </>
           ) : (
-            <Step0 invid={invid} setInvite={setInvite}/>
+            <Step0 invid={invid} setInvite={setInvite} />
           )}
         </div>
       </div>
