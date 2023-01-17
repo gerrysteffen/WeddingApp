@@ -15,6 +15,11 @@ import ManageEvent from '../../components/app/ManageEvent.js';
 import ManageParticipants from '../../components/app/ManageParticipants.js';
 import ManageEventDetails from '../../components/app/ManageEventDetails.js';
 import ConnectInviteId from '../../components/app/ConnectInviteId.js';
+import CreateEventComms from '../../components/app/CreateEventComms.js';
+import ManageInvites from '../../components/app/ManageInvites.js';
+import ManageEventComms from '../../components/app/ManageEventComms.js';
+import UserRSVPs from '../../components/app/UserRSVPs.js';
+
 
 function appIndex() {
   const [accessToken, setAccessToken] = useState(null);
@@ -58,7 +63,7 @@ function appIndex() {
       setActiveEvent(newActiveEvent);
     };
     if (activeEventId) getActiveEvent();
-  }, [activeEventId]);
+  }, [activeEventId, mode]);
 
   // DRY logout function
   const logout = () => {
@@ -84,6 +89,7 @@ function appIndex() {
     connectInviteId: 'userDashboard',
     userEvents: 'userDashboard',
     userMyEvents: 'userDashboard',
+    userRSVPs: 'userDashboard',
     eventDashboard: 'userDashboard',
     eventDetails: 'eventDashboard',
     manageEvent: 'eventDashboard',
@@ -91,6 +97,9 @@ function appIndex() {
     manageEventDetails: 'manageEvent',
     manageParticipants: 'manageEvent',
     createEventInvites: 'manageEvent',
+    manageEventInvites: 'manageEvent',
+    createEventComms: 'manageEvent',
+    manageEventComms: 'manageEvent',
   }
 
   // before the user info is retrieved, a loading wheel is displayed - after that the current mode decides what is shown
@@ -110,6 +119,7 @@ function appIndex() {
               <UserDashboard util={util} events={events} />
             )}
             {mode === 'userProfile' && <UserProfile util={util} />}
+            {mode === 'userRSVPs' && <UserRSVPs invites={user.invites} util={util} />}
             {mode === 'userCreate' && <CreateEvent util={util} />}
             {mode === 'connectInviteId' && <ConnectInviteId util={util} />}
             {mode === 'userEvents' && (
@@ -163,6 +173,23 @@ function appIndex() {
             {mode === 'createEventInvites' && (
               <InviteUsers
                 util={util}
+              />
+            )}
+            {mode === 'manageEventInvites' && (
+              <ManageInvites
+                util={util}
+                event={activeEvent}
+              />
+            )}
+            {mode === 'createEventComms' && (
+              <CreateEventComms
+                util={util}
+              />
+            )}
+            {mode === 'manageEventComms' && (
+              <ManageEventComms
+                util={util}
+                event={activeEvent}
               />
             )}
           </div>

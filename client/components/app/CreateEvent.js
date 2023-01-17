@@ -29,7 +29,7 @@ function CreateEvent({util}) {
           <label className='mt-2 pl-2'>Date</label>
           <input value={date} onChange={(event)=>{setDate(event.target.value)}} type='date' className='border border-black p-2'></input>
           <label className='mt-2 pl-2'>Description</label>
-          <input value={description} onChange={(event)=>{setDescription(event.target.value)}} type='text' placeholder='Give it a Tagline' className='border border-black p-2'></input>
+          <textarea value={description} onChange={(event)=>{setDescription(event.target.value)}} rows='6' placeholder='Give it a description or tagline' className='border border-black p-2'></textarea>
         </form>
       </div>
       <div className={Styles.buttonContainer}>

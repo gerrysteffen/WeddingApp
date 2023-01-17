@@ -6,7 +6,23 @@ function ManageEventDetails({ event, util }) {
   const [eventInfo, setEventInfo] = useState(event);
   const [editMode, setEditMode] = useState(false);
 
-  const infoKeys = ['name', 'description', 'date'];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+
+  event.dateShort = String(new Date(event.date).getDay())+' '+months[new Date(event.date).getUTCMonth()]+' '+String(new Date(event.date).getFullYear())
+
+  const infoKeys = ['name', 'description', 'dateShort'];
 
   const infoTitles = ['Name', 'Description', 'Date'];
 
@@ -37,12 +53,12 @@ function ManageEventDetails({ event, util }) {
             return (
               <div
                 key={key}
-                className='h-14 flex flex-row justify-between items-center'
+                className='h-fit mb-4 flex flex-row justify-between items-top'
               >
-                <div>{infoTitles[index]}</div>
+                <div className='mr-6 w-1/2'>{infoTitles[index]}</div>
                 {/* Two possibilities: no edit mode -> User information static; edit mode -> user information in input fields*/}
                 {!editMode ? (
-                  <div>{eventInfo[key]}</div>
+                  <div className='w-full'>{eventInfo[key]}</div>
                 ) : (
                   <input
                     type='text'

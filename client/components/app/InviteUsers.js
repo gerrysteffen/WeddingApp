@@ -50,7 +50,8 @@ function InviteUsers({ util }) {
       invites,
       util.activeEventId
     );
-    console.log(res);
+    util.setMode('manageEvent')
+    // console.log(res);
   };
 
   return (

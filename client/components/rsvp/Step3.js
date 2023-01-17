@@ -3,15 +3,15 @@ import Styles from '../../utils/styles';
 
 function Step3({ invite, rsvp, step }) {
   return (
-    <>
+    <div className='h-full overflow-y-auto mb-24'>
       <div>
         <div className='mb-4'>
           <div className='font-bold'>Attendance Status</div>
-          <div>{invite.attendanceStatus}</div>
+          <div className='ml-2'>{invite.attendanceStatus}</div>
       </div>
         <div className='font-bold mb-4'>Guests</div>
         {invite.guests.map((guest, index)=>(
-          <div className='mb-4 ml-2'>
+          <div key={guest.firstName} className='mb-4 ml-2'>
             <div className='font-bold'>{guest.firstName+' '+guest.lastName}</div>
             <div className='flex flex-row justify-start'>
               <div>Meal Preference:</div>
@@ -20,7 +20,7 @@ function Step3({ invite, rsvp, step }) {
             <div>Allergies:</div>
             {rsvp[index].allergies.length>0 ? (
               rsvp[index].allergies.map((allergy) => (
-                <div className='ml-4'>{allergy}</div>
+                <div key={allergy} className='ml-4'>{allergy}</div>
               ))
             ):(
               <div className='ml-4 italic'>No Allergies</div>
@@ -36,7 +36,7 @@ function Step3({ invite, rsvp, step }) {
             }}
             className={Styles.buttonShort}
           >
-            Back
+            Edit
           </button>
           <button
             type='button'
@@ -48,7 +48,7 @@ function Step3({ invite, rsvp, step }) {
             Submit
           </button>
         </div>
-    </>
+    </div>
   );
 }
 

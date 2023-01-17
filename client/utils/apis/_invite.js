@@ -39,17 +39,42 @@ const inviteAPIs = {
     return res.json();
   },
 
-  // getEvents: async (accessToken) => {
-  //   const res = await fetch(ServerURL + '/events', {
-  //     method: 'GET',
-  //     mode: 'cors',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   }).catch((error) => console.log(error));
-  //   return res.json();
-  // },
+  updateInviteWithRsvp: async (invite, rsvp) => {
+    const data = {
+      users: invite.guests,
+      invite: {
+        _id: invite._id,
+        attendanceStatus: invite.attendanceStatus
+      },
+      rsvps: rsvp
+    };
+    // console.log(data)
+    const res = await fetch(ServerURL + '/invitersvp', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.log(error));
+    return res.json();
+  },
+
+  getInvites: async (accessToken, inviteIds) => {
+    const data = {
+      invites: inviteIds
+    }
+    const res = await fetch(ServerURL + '/invites', {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.log(error));
+    return res.json();
+  },
 
   // getMyEvents: async (accessToken) => {
   //   const res = await fetch(ServerURL + '/myevents', {

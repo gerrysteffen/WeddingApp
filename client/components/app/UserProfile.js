@@ -52,13 +52,18 @@ function UserProfile({ util }) {
   };
 
   const handlePasswordSubmit = async () => {
-    const res = await apiCalls.changePW(util.accessToken, util.user, oldPassword, newPassword);
+    const res = await apiCalls.changePW(
+      util.accessToken,
+      util.user,
+      oldPassword,
+      newPassword
+    );
     if (res.error) {
       console.log(res.message);
     } else {
-      setOldPassword('')
-      setNewPassword('')
-      setPasswordMode(false)
+      setOldPassword('');
+      setNewPassword('');
+      setPasswordMode(false);
     }
   };
 
@@ -71,28 +76,26 @@ function UserProfile({ util }) {
         {!passwordMode ? (
           <>
             {infoKeys.map((key, index) => {
-              if (userInfo[key]) {
-                return (
-                  <div
-                    key={key}
-                    className='h-14 flex flex-row justify-between items-center'
-                  >
-                    <div>{infoTitles[index]}</div>
-                    {/* Two possibilities: no edit mode -> User information static; edit mode -> user information in input fields*/}
-                    {!editMode ? (
-                      <div>{userInfo[key]}</div>
-                    ) : (
-                      <input
-                        type='text'
-                        name={key}
-                        value={userInfo[key]}
-                        onChange={(event) => handleUserChange(event)}
-                        className='border border-black p-2'
-                      ></input>
-                    )}
-                  </div>
-                );
-              }
+              return (
+                <div
+                  key={key}
+                  className='h-14 flex flex-row justify-between items-center'
+                >
+                  <div>{infoTitles[index]}</div>
+                  {/* Two possibilities: no edit mode -> User information static; edit mode -> user information in input fields*/}
+                  {!editMode ? (
+                    <div>{userInfo[key]}</div>
+                  ) : (
+                    <input
+                      type='text'
+                      name={key}
+                      value={userInfo[key]}
+                      onChange={(event) => handleUserChange(event)}
+                      className='border border-black p-2'
+                    ></input>
+                  )}
+                </div>
+              );
             })}
           </>
         ) : (
@@ -101,7 +104,7 @@ function UserProfile({ util }) {
             <div className='h-14 flex flex-row justify-between items-center'>
               <div>Old Password</div>
               <input
-                type='text'
+                type='password'
                 value={oldPassword}
                 onChange={(event) => {
                   setOldPassword(event.target.value);
@@ -112,7 +115,7 @@ function UserProfile({ util }) {
             <div className='h-14 flex flex-row justify-between items-center'>
               <div>New Password</div>
               <input
-                type='text'
+                type='password'
                 value={newPassword}
                 onChange={(event) => {
                   setNewPassword(event.target.value);
@@ -132,7 +135,7 @@ function UserProfile({ util }) {
                 if (editMode) handleUserSubmit();
                 if (passwordMode) handlePasswordSubmit();
               }}
-              className='w-full border border-black p-2 bg-slate-200 rounded'
+              className={Styles.buttonLong}
             >
               Submit
             </button>

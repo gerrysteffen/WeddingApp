@@ -25,6 +25,15 @@ function UserDashboard({ util, events }) {
           className={Styles.buttonLong}
           disabled={(events.length>0) ? false : true}
           onClick={() => {
+            util.setMode('userRSVPs');
+          }}
+        >
+          RSVPs
+        </button>
+        <button
+          className={Styles.buttonLong}
+          disabled={(events.length>0) ? false : true}
+          onClick={() => {
             util.setMode('userEvents');
           }}
         >
@@ -32,7 +41,7 @@ function UserDashboard({ util, events }) {
         </button>
         <button
           className={Styles.buttonLong}
-          disabled={(events.length>0) ? false : true}
+          disabled={(events.filter((event)=>event.organisers.includes(util.user._id)).length>0) ? false : true}
           onClick={() => {
             util.setMode('userMyEvents');
           }}
@@ -70,7 +79,7 @@ function UserDashboard({ util, events }) {
           onClick={() => {
             util.logout();
           }}
-          className='w-full mt-4 border border-black p-2 bg-slate-400 rounded'
+          className={Styles.buttonColor}
         >
           Logout
         </button>

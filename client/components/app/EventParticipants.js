@@ -32,12 +32,12 @@ function EventParticipants({ event }) {
       <div className={Styles.bodyContainer}>
         {eventParticipants.map((participant) => {
           return (
-            <div key={participant} className='flex flex-row justify-between'>
-              <div className='flex flex-row justify-start'>
-                <div>{participant.name}</div>
-                {(participant.name != participant.mainGuest) && <div className='ml-2'>{participant.mainGuest}'s Guest</div>}
+            <div key={participant.name} className='flex flex-row justify-between mt-4'>
+              <div className='flex flex-row justify-start flex-wrap'>
+                <div className='font-bold'>{participant.name}</div>
+                {(participant.name != participant.mainGuest) && <div className='ml-4'>{participant.mainGuest}'s Guest</div>}
               </div>
-              <div>{participant.attendanceStatus}</div>
+              <div className='ml-2'>{participant.attendanceStatus}</div>
             </div>
           )
         })}

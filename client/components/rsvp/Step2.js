@@ -20,7 +20,7 @@ function Step2({ invite, rsvp, step }) {
   };
 
   useEffect(() => {
-    if (rsvp.length > 0) {
+    if (rsvp && rsvp.length > 0) {
       const newRsvpInfo = rsvpInfo.slice();
       for (let i = 0; i < rsvp.length; i++) {
         newRsvpInfo[i] = rsvp[i];

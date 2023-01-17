@@ -1,6 +1,7 @@
 'use strict';
 
 import Comm from '../models/comms.js';
+import Event from '../models/events.js';
 
 const getAllComms = async (req, res) => {
   try {
@@ -30,7 +31,14 @@ const createComm = async (req, res) => {
     const { _id, ...commInfo } = req.body.comm;
     const comm = await Comm.create({
       ...commInfo,
+      createdDate: Date.now(),
+      updatedDate: Date.now(),
     });
+    await Event.updateOne({_id: commInfo.event}, 
+      {
+        $push: { eventComms: comm._id },
+      },
+    )
     res.status(201);
     res.send(JSON.stringify(comm));
   } catch (error) {

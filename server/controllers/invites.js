@@ -1,13 +1,17 @@
 'use strict';
 
-import { Mongoose } from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 import Event from '../models/events.js';
 import Invite from '../models/invites.js';
+import RSVP from '../models/rsvp.js';
 import User from '../models/users.js';
 
-const getAllInvites = async (req, res) => {
+const getManyInvites = async (req, res) => {
   try {
-    const invites = await Invite.find({});
+    const inviteIds = req.body.invites;
+    // const inviteIds = ffInviteIds.map((field)=> mongoose.Types.ObjectId(field))
+    const invites = await Invite.find({ _id: { $in: inviteIds } }).populate('event');
+    console.log(invites);
     res.status(200);
     res.send(JSON.stringify(invites));
   } catch (error) {
@@ -19,27 +23,35 @@ const getAllInvites = async (req, res) => {
 const getInvite = async (req, res) => {
   try {
     const _id = req.params.invid;
-    if(!Mongoose.prototype.isValidObjectId(_id)) {
-      res.status(400).send(JSON.stringify({error:'400',message:'Invalid ID.'}))
+    if (!Mongoose.prototype.isValidObjectId(_id)) {
+      res
+        .status(400)
+        .send(JSON.stringify({ error: '400', message: 'Invalid ID.' }));
     } else {
-      const invite = await Invite.findOne({ _id: _id })
-        .populate([
-          {
-            path: 'event',
-            model: 'event',
-          },{
-            path: 'mainGuest',
-            model: 'user'
-          },{
-            path: 'guests',
-            model: 'user'
-          },{
-            path: 'rsvps',
-            model: 'rsvp'
-          }
-        ]);
+      const invite = await Invite.findOne({ _id: _id }).populate([
+        {
+          path: 'event',
+          model: 'event',
+        },
+        {
+          path: 'mainGuest',
+          model: 'user',
+        },
+        {
+          path: 'guests',
+          model: 'user',
+        },
+        {
+          path: 'rsvps',
+          model: 'rsvp',
+        },
+      ]);
       if (!invite) {
-        res.status(400).send(JSON.stringify({error:'400',message:'Invitation not found.'}))
+        res
+          .status(400)
+          .send(
+            JSON.stringify({ error: '400', message: 'Invitation not found.' })
+          );
       } else {
         res.status(200);
         res.send(JSON.stringify(invite));
@@ -89,7 +101,7 @@ const createInvites = async (req, res) => {
           const inviteInfo = {
             ...dataPoint.invite,
             mainGuest: user._id,
-            attendanceStatus: 'No response',
+            attendanceStatus: 'No Response',
             guests: [user._id],
           };
           const invite = await Invite.create({ ...inviteInfo });
@@ -112,8 +124,9 @@ const createInvites = async (req, res) => {
             }
           );
           return invite._id;
-        } if (previousInvite) {
-          return 'already existed'
+        }
+        if (previousInvite) {
+          return 'already existed';
         }
       })
     );
@@ -128,13 +141,96 @@ const createInvites = async (req, res) => {
 const updateInvite = async (req, res) => {
   try {
     const { _id, ...inviteInfo } = req.body.invite;
-    await Invite.updateOne(
+    const invite = await Invite.findOneAndUpdate(
       { _id: _id },
       {
         ...inviteInfo,
+      },
+      {
+        new: true,
       }
     );
-    res.sendStatus(204);
+    res.status(202).send(JSON.stringify(invite));
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const updateInviteWithRSVP = async (req, res) => {
+  try {
+    const invite = req.body.invite;
+    const users = req.body.users;
+    const rsvps = req.body.rsvps;
+    const userIds = await Promise.all(
+      users.map(async (user, index) => {
+        const { _id, ...userInfo } = user;
+        if (_id) {
+          if (userInfo.invites && userInfo.invites.includes(invite._id)) {
+            User.updateOne(
+              { _id: _id },
+              {
+                ...userInfo,
+              }
+            );
+          } else {
+            User.updateOne(
+              { _id: _id },
+              {
+                ...userInfo,
+                $push: { invites: invite._id },
+              }
+            );
+          }
+          return _id;
+        } else {
+          const newUser = await User.create({
+            ...userInfo,
+            invites: [invite._id],
+          });
+          return newUser._id;
+        }
+      })
+    );
+    invite.guests = userIds;
+
+    const rsvpIds = await Promise.all(
+      rsvps.map(async (rsvp, index) => {
+        const { _id, ...rsvpInfo } = rsvp;
+        if (_id) {
+          RSVP.updateOne(
+            { _id: _id },
+            {
+              ...rsvpInfo,
+              attendanceStatus: invite.attendanceStatus,
+              user: userIds[index],
+              invite: invite._id,
+            }
+          );
+          return _id;
+        } else {
+          const newRSVP = await RSVP.create({
+            ...rsvpInfo,
+            user: userIds[index],
+            invite: invite._id,
+          });
+          return newRSVP._id;
+        }
+      })
+    );
+    invite.rsvps = rsvpIds;
+
+    const { _id, ...inviteInfo } = invite;
+    const newInvite = await Invite.findOneAndUpdate(
+      { _id: _id },
+      {
+        ...inviteInfo,
+      },
+      {
+        new: true,
+      }
+    ).populate(['rsvps', 'guests']);
+    res.status(202).send(JSON.stringify(newInvite));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -153,10 +249,11 @@ const deleteInvite = async (req, res) => {
 };
 
 const InviteController = {
-  getAllInvites,
+  getManyInvites,
   getInvite,
   createInvite,
   createInvites,
+  updateInviteWithRSVP,
   updateInvite,
   deleteInvite,
 };

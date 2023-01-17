@@ -33,6 +33,17 @@ const eventAPIs = {
     return res.json();
   },
 
+  getPublicEvent: async (eventId) => {
+    const res = await fetch(ServerURL + '/publicevent/'+eventId, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).catch((error) => console.log(error));
+    return res.json();
+  },
+  
   getEvents: async (accessToken) => {
     const res = await fetch(ServerURL + '/events', {
       method: 'GET',

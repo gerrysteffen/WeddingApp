@@ -14,7 +14,7 @@ function EventList({ util, title, events }) {
                 util.setActiveEventId(event._id);
                 util.setMode('eventDashboard');
               }}
-              className='mt-4 border border-black p-2 bg-slate-200 rounded'
+              className={Styles.buttonLong}
             >
               {event.name}
             </button>

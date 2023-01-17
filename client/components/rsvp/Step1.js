@@ -29,7 +29,7 @@ function Step1({ invite, step }) {
     let disabled = false;
     for (
       let i = 0;
-      i <= Number(document.getElementById('numberOfGuestsField').value);
+      i <= (document.getElementById('numberOfGuestsField') ? Number(document.getElementById('numberOfGuestsField').value) : 0);
       i++
     ) {
       if (

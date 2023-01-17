@@ -12,13 +12,9 @@ const rsvpSchema = new mongoose.Schema({
     ref: 'user',
   },
   attendanceStatus: String,
-  mealPreferences: [
-    {
-      name: String,
-      applicable: Boolean,
-      isOther: Boolean,
-      // comments: String,
-    },
+  mealPreference: String,
+  allergies: [
+    String
   ],
 });
 

@@ -32,7 +32,9 @@ const getUser = async (req, res) => {
       user && res.status(200).send(JSON.stringify(user));
     }
     if (!_id || !user)
-      res.status(406).send(JSON.stringify({ error: '406', message: 'False request.' }));
+      res
+        .status(406)
+        .send(JSON.stringify({ error: '406', message: 'False request.' }));
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -43,26 +45,42 @@ const createUser = async (req, res) => {
   try {
     const { _id, email, password, ...userInfo } = req.body.user;
     const previousUser = await User.findOne({ email: email });
-    if (previousUser) {
+    if (previousUser && previousUser.active) {
       res.status(409);
-      res.send(JSON.stringify({ error: '409', message: 'User already exists' }));
+      res.send(
+        JSON.stringify({ error: '409', message: 'User already exists' })
+      );
     } else if (
       !email ||
       !password ||
       !userInfo.firstName ||
       !userInfo.lastName
     ) {
-      res.status(400).send(JSON.stringify({
-        error: '400',
-        message: 'Could not create user - data missing',
-      }));
+      res.status(400).send(
+        JSON.stringify({
+          error: '400',
+          message: 'Could not create user - data missing',
+        })
+      );
     } else {
       const hash = await bcrypt.hash(password, 10);
-      const user = await User.create({
-        email,
-        password: hash,
-        ...userInfo,
-      });
+      let user;
+      if (previousUser && !previousUser.active) {
+        user = await User.findOneAndUpdate({ _id: previousUser._id }, {
+          password: hash,
+          active: true,
+          ...userInfo,
+        },{
+          new: true,
+        });
+      } else {
+        user = await User.create({
+          email,
+          password: hash,
+          active: true,
+          ...userInfo,
+        });
+      }
       const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
       res.status(201).send(JSON.stringify({ accessToken }));
     }
@@ -87,7 +105,9 @@ const updateUser = async (req, res) => {
       ).select('-password');
       res.status(202).send(JSON.stringify(user));
     } else {
-      res.status(401).send(JSON.stringify({ error: '401', message: 'Not authorized' }))
+      res
+        .status(401)
+        .send(JSON.stringify({ error: '401', message: 'Not authorized' }));
     }
   } catch (error) {
     console.log(error);
@@ -100,13 +120,25 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body.user;
     const user = await User.findOne({ email: email });
     if (!user) {
-      res.status(401).send(JSON.stringify({ error: '401', message: 'Username or password is incorrect' }));
+      res
+        .status(401)
+        .send(
+          JSON.stringify({
+            error: '401',
+            message: 'Username or password is incorrect',
+          })
+        );
     } else {
       const validation = await bcrypt.compare(password, user.password);
       if (!validation) {
         res
           .status(401)
-          .send(JSON.stringify({ error: '401', message: 'Username or password is incorrect' }));
+          .send(
+            JSON.stringify({
+              error: '401',
+              message: 'Username or password is incorrect',
+            })
+          );
       } else if (validation) {
         const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
         res.status(200).send(JSON.stringify({ accessToken }));
@@ -122,16 +154,26 @@ const changePassword = async (req, res) => {
   try {
     const { _id, oldPassword, newPassword } = req.body.user;
     if (_id != req.user._id) {
-      res.status(401).send(JSON.stringify({ error: '401', message: 'Not authorized' }))
+      res
+        .status(401)
+        .send(JSON.stringify({ error: '401', message: 'Not authorized' }));
     } else {
       const user = await User.findOne({ _id: _id });
       if (!user) {
-        res.status(401).send(JSON.stringify({ error: '400', message: 'User not found' }));
+        res
+          .status(401)
+          .send(JSON.stringify({ error: '400', message: 'User not found' }));
       } else {
         const validation = await bcrypt.compare(oldPassword, user.password);
-        console.log(validation)
         if (!validation) {
-          res.status(401).send(JSON.stringify({ error: '401', message: 'Old password is incorrect' }));
+          res
+            .status(401)
+            .send(
+              JSON.stringify({
+                error: '401',
+                message: 'Old password is incorrect',
+              })
+            );
         } else if (validation) {
           const hash = await bcrypt.hash(newPassword, 10);
           await User.findOneAndUpdate(
@@ -143,7 +185,9 @@ const changePassword = async (req, res) => {
               new: true,
             }
           ).select('-password');
-          res.status(202).send(JSON.stringify({message: 'Password successfully changed'}));
+          res
+            .status(202)
+            .send(JSON.stringify({ message: 'Password successfully changed' }));
         }
       }
     }

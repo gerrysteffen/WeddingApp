@@ -87,6 +87,18 @@ const getEvent = async (req, res) => {
   }
 };
 
+const getPublicEvent = async (req, res) => {
+  try {
+    const _id = req.params.eventid;
+    const event = await Event.findOne({ _id: _id })
+      .populate('eventComms')
+    res.status(200).send(JSON.stringify(event));
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
 const createEvent = async (req, res) => {
   try {
     const { _id, ...eventInfo } = req.body.event;
@@ -170,6 +182,7 @@ const EventController = {
   createEvent,
   updateEvent,
   deleteEvent,
+  getPublicEvent
 };
 
 export default EventController;

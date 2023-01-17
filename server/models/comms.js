@@ -11,7 +11,6 @@ const commsSchema = new mongoose.Schema({
   },
   title: String,
   body: String,
-  isImportant: Boolean,
 });
 
 const Comm = mongoose.model('comm', commsSchema);
