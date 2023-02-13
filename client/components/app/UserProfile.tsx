@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
+import { StateType } from '../../types';
+import { setUser } from '../../store/actions';
 
-function UserProfile({ util }) {
-  const [userInfo, setUserInfo] = useState(util.user);
+function UserProfile() {
+  const user = useSelector((state: StateType) => state.user);
+  const accessToken = useSelector((state: StateType) => state.accessToken);
+
+  const [userInfo, setUserInfo] = useState({...user});
   const [editMode, setEditMode] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [passwordMode, setPasswordMode] = useState(false);
+
+  const dispatch = useDispatch();
 
   const infoKeys = [
     'firstName',
@@ -41,20 +49,20 @@ function UserProfile({ util }) {
   };
 
   const handleUserSubmit = async () => {
-    const res = await apiCalls.updateUser(util.accessToken, userInfo);
+    const res = await apiCalls.updateUser(accessToken, userInfo);
     if (res.error) {
       console.log(res.message);
     } else {
+      dispatch(setUser(res))
       setUserInfo(res);
-      util.user = res;
       setEditMode(false);
     }
   };
 
   const handlePasswordSubmit = async () => {
     const res = await apiCalls.changePW(
-      util.accessToken,
-      util.user,
+      accessToken,
+      user,
       oldPassword,
       newPassword
     );
@@ -160,7 +168,7 @@ function UserProfile({ util }) {
         {editMode || passwordMode ? (
           <button
             onClick={() => {
-              setUserInfo(util.user);
+              setUserInfo(user);
               if (editMode) setEditMode(!editMode);
               if (passwordMode) setPasswordMode(!passwordMode);
             }}

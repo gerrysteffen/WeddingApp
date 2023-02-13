@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   active: Boolean,
+  activeEvent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'event',
+  },
   addressLine1: String,
   addressLine2: String,
   city: String,

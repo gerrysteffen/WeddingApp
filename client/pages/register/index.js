@@ -47,7 +47,7 @@ function RegIndex({ userid }) {
       } else {
         const { accessToken } = res;
         localStorage.setItem('accessToken', accessToken);
-        router.push('/app');
+        router.push('/user');
       }
     },
   };

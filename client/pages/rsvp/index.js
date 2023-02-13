@@ -51,7 +51,7 @@ function RSVPindex({ invid }) {
       if (res) {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
-          router.push('/app');
+          router.push('/user');
         } else {
           router.push('/');
         }

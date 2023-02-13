@@ -1,48 +1,58 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import apiCalls from '../../utils/apis/index.js';
 import Styles from '../../utils/styles.js';
 import { BiMenu } from 'react-icons/bi';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAccessToken, setUser } from '../../store/actions/index';
 
 function index() {
-  // const [credentials, setCredentials] = useState({
-  //   email: '',
-  //   password: ''
-  // })
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [accessToken, setAccessToken] = useState('');
-
-  // const onChangeHandler = (e) => {
-  //     setCredetials(prev => {
-  //       ...prev,
-  //       [e.target.name]: e.target.value
-  //     })
-  // }
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: '',
+  });
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // BELOW: if there is a valid access token stored, redirect to app
   useEffect(() => {
     const initialSetup = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-      if (accessToken) {
-        const user = await apiCalls.getInitialUser(accessToken);
-        user && router.push('/app');
+      const storedAccessToken = localStorage.getItem('accessToken');
+      if (storedAccessToken) {
+        const user = await apiCalls.getInitialUser(storedAccessToken);
+        if (user) {
+          dispatch(setUser(user));
+          dispatch(setAccessToken(storedAccessToken));
+          router.push('/user');
+        } else {
+          localStorage.removeItem('accessToken');
+        }
       }
     };
     initialSetup();
-  }, [accessToken]);
+  }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async () => {
-    const res = await apiCalls.loginUser({ email, password });
+    const res = await apiCalls.loginUser(credentials);
     if (res.error) {
       console.log(res.message);
     } else {
-      const { accessToken } = res;
-      localStorage.setItem('accessToken', accessToken);
-      setAccessToken(accessToken)
+      const { accessToken, user } = res;
+      localStorage.setItem('accessToken', accessToken)
+      dispatch(setUser(user));
+      dispatch(setAccessToken(accessToken));
+      router.push('/user');
     }
   };
 
@@ -56,35 +66,33 @@ function index() {
         </div>
         <h1 className='absolute top-10 left-6 text-48px'>Login</h1>
         <div className='absolute top-32 left-0 w-full flex flex-col px-6'>
-          <form
-            className='flex flex-col w-full'
-          >
+          <form className='flex flex-col w-full'>
             <label className='mt-2 pl-2'>Email</label>
             <input
               type='text'
-              value={email}
+              name='email'
+              value={credentials.email}
               placeholder='Email'
-              onChange={(event) => {
-                setEmail(event.target.value);
+              onChange={(e) => {
+                handleChange(e);
               }}
               className='border border-black p-2'
             ></input>
             <label className='mt-2 pl-2'>Password</label>
             <input
               type='password'
-              value={password}
+              name='password'
+              value={credentials.password}
               placeholder='Password'
-              onChange={(event) => {
-                setPassword(event.target.value);
+              onChange={(e) => {
+                handleChange(e);
               }}
               className='border border-black p-2'
             ></input>
             <button
               type='button'
-              onClick={()=>handleSubmit()}
-              className={
-                Styles.buttonColor
-              }
+              onClick={() => handleSubmit()}
+              className={Styles.buttonColor}
             >
               Login
             </button>
@@ -92,10 +100,7 @@ function index() {
           <div className='mt-4 text-center'>or</div>
           <div className='flex flex-row w-full'>
             <Link href='./register' className='w-full'>
-              <button
-                type='button'
-                className={Styles.buttonLong}
-              >
+              <button type='button' className={Styles.buttonLong}>
                 Register
               </button>
             </Link>

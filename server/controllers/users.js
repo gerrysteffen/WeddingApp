@@ -141,7 +141,7 @@ const loginUser = async (req, res) => {
           );
       } else if (validation) {
         const accessToken = jwt.sign({ _id: user._id }, SECRET_KEY);
-        res.status(200).send(JSON.stringify({ accessToken }));
+        res.status(200).send(JSON.stringify({ accessToken, user }));
       }
     }
   } catch (error) {
