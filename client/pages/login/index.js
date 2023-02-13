@@ -5,10 +5,21 @@ import apiCalls from '../../utils/apis/index.js';
 import Styles from '../../utils/styles.js';
 import { BiMenu } from 'react-icons/bi';
 
-function index(props) {
+function index() {
+  // const [credentials, setCredentials] = useState({
+  //   email: '',
+  //   password: ''
+  // })
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [accessToken, setAccessToken] = useState('');
+
+  // const onChangeHandler = (e) => {
+  //     setCredetials(prev => {
+  //       ...prev,
+  //       [e.target.name]: e.target.value
+  //     })
+  // }
 
   const router = useRouter();
 

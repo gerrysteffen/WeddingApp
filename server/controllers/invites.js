@@ -9,9 +9,7 @@ import User from '../models/users.js';
 const getManyInvites = async (req, res) => {
   try {
     const inviteIds = req.body.invites;
-    // const inviteIds = ffInviteIds.map((field)=> mongoose.Types.ObjectId(field))
     const invites = await Invite.find({ _id: { $in: inviteIds } }).populate('event');
-    console.log(invites);
     res.status(200);
     res.send(JSON.stringify(invites));
   } catch (error) {
