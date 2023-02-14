@@ -1,15 +1,18 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
+import { StateType } from '../../types';
 
-function UserRSVPs({ invites, util }) {
+function UserRSVPs() {
+  const invites = useSelector((state: StateType) => state.user.invites);
+  const accessToken = useSelector((state: StateType) => state.accessToken);
   const [fullInvites, setFullInvites] = useState(null);
 
   useEffect(() => {
-    console.log(invites);
     const getInvites = async () => {
-      const res = await apiCalls.getInvites(util.accessToken, invites);
+      const res = await apiCalls.getInvites(accessToken, invites);
       console.log(res);
       setFullInvites(res);
     };

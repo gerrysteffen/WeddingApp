@@ -162,7 +162,7 @@ function userIndex() {
             )}
             {userMode === 'userProfile' && <UserProfile />}
             {userMode === 'userRSVPs' && (
-              <UserRSVPs invites={user.invites} util={util} />
+              <UserRSVPs />
             )}
             {userMode === 'userCreate' && <CreateEvent util={util} />}
             {userMode === 'connectInviteId' && <ConnectInviteId util={util} />}
