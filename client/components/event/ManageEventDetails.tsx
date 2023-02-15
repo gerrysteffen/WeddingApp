@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveEvent } from '../../store/actions';
+import { Store } from '../../types';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
 
-function ManageEventDetails({ event, util }) {
-  const [eventInfo, setEventInfo] = useState(event);
+function ManageEventDetails() {
+  const accessToken = useSelector((state: Store) => state.accessToken);
+  const activeEvent = useSelector((state: Store) => state.activeEvent);
+  const [eventInfo, setEventInfo] = useState({...activeEvent});
   const [editMode, setEditMode] = useState(false);
+
+  const dispatch = useDispatch()
 
   const months = [
     'January',
@@ -20,26 +27,28 @@ function ManageEventDetails({ event, util }) {
     'December',
   ]
 
-  event.dateShort = String(new Date(event.date).getDay())+' '+months[new Date(event.date).getUTCMonth()]+' '+String(new Date(event.date).getFullYear())
+  activeEvent.dateShort = String(new Date(activeEvent.date).getDay())+' '+months[new Date(activeEvent.date).getUTCMonth()]+' '+String(new Date(activeEvent.date).getFullYear()) 
+  //TODO: Do this once rather than in multiple components
 
   const infoKeys = ['name', 'description', 'dateShort'];
 
   const infoTitles = ['Name', 'Description', 'Date'];
 
-  const handleEventChange = (event) => {
+  const handleEventChange = (e) => {
     setEventInfo({
       ...eventInfo,
-      [event.target.name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleEventSubmit = async () => {
-    const res = await apiCalls.updateEvent(util.accessToken, eventInfo);
+    const res = await apiCalls.updateEvent(accessToken, eventInfo);
     if (res.error) {
       console.log(res.message);
     } else {
+      // TODO: normalise message back
       setEventInfo(res);
-      event = res;
+      dispatch(setActiveEvent(res));
       setEditMode(false);
     }
   };
@@ -64,7 +73,7 @@ function ManageEventDetails({ event, util }) {
                     type='text'
                     name={key}
                     value={eventInfo[key]}
-                    onChange={(event) => handleEventChange(event)}
+                    onChange={(e) => handleEventChange(e)}
                     className='border border-black p-2'
                   ></input>
                 )}
@@ -93,7 +102,7 @@ function ManageEventDetails({ event, util }) {
         {editMode ? (
           <button
             onClick={() => {
-              setEventInfo(event);
+              setEventInfo(activeEvent);
               setEditMode(!editMode);
             }}
             className={Styles.buttonLong}

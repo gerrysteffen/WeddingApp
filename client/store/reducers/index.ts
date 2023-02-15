@@ -1,6 +1,7 @@
-import { StateType } from '../../types';
+import { Store } from '../../types';
+import { initialState } from '../store';
 
-const reducer = (state: StateType, action: { type: string; payload: any }) => {
+const reducer = (state: Store, action: { type: string; payload: any }) => {
   switch (action.type) {
     case 'SET_ACCESSTOKEN':
       return {
@@ -34,12 +35,28 @@ const reducer = (state: StateType, action: { type: string; payload: any }) => {
       return {
         ...state,
         userMode: action.payload,
+        eventMode: 'eventDashboard'
+      };
+    case 'SET_EVENT_MODE':
+      return {
+        ...state,
+        eventMode: action.payload,
+        userMode: 'userDashboard',
+      };
+    case 'SET_NAVBAR_MODE':
+      return {
+        ...state,
+        navBarMode: action.payload,
       };
     case 'SET_ALERT':
       return {
         ...state,
         activeAlert: action.payload.active,
         alertContent: action.payload.alertContent,
+      };
+    case 'RESET_STATE':
+      return {
+        ...initialState
       };
     default:
       return state;

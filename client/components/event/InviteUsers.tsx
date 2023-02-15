@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setEventMode } from '../../store/actions/index';
+import { Store } from '../../types';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
 
-function InviteUsers({ util }) {
+function InviteUsers() {
+  const accessToken = useSelector((state: Store) => state.accessToken);
+  const activeEvent = useSelector((state: Store) => state.activeEvent);
+
+  const dispatch = useDispatch()
+
   const inviteTemplate = {
     firstName: 'First Name',
     lastName: 'Last Name',
@@ -29,7 +37,7 @@ function InviteUsers({ util }) {
     newInvites[currentIndex] = currentInvite;
     setInvites(newInvites);
     setCurrentInvite(emptyInvite);
-    document.getElementById('inviteForm').reset();
+    (document.getElementById('inviteForm') as HTMLFormElement).reset();
     setCurrentIndex(newInvites.length);
   };
 
@@ -46,11 +54,12 @@ function InviteUsers({ util }) {
 
   const handleSubmit = async () => {
     const res = await apiCalls.postInvites(
-      util.accessToken,
+      accessToken,
       invites,
-      util.activeEventId
+      activeEvent._id
     );
-    util.setMode('manageEvent')
+    //TODO: what to do with res
+    dispatch(setEventMode('manageEvent'))
     // console.log(res);
   };
 
@@ -136,7 +145,7 @@ function InviteUsers({ util }) {
           <>
             <button
               className={Styles.buttonLong}
-              disabled={!invites.length > 0}
+              disabled={invites.length > 0}
               onClick={() => {
                 handleSubmit();
               }}

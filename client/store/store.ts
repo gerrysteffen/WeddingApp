@@ -3,15 +3,17 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createWrapper } from "next-redux-wrapper";
 import rootReducer from "./reducers";
-import { StateType } from '../types';
+import { Store } from '../types';
 
 // initial states here
-const initialState: StateType = {
+export const initialState: Store = {
   accessToken: null,
   user: null,
   events: null,
   activeEvent: null,
+  navBarMode: false,
   userMode: 'userDashboard',
+  eventMode: 'eventDashboard',
   activeAlert: false,
   alertContent: {
     severity: 'error',

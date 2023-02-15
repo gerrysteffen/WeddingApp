@@ -1,12 +1,35 @@
 import React from 'react';
 import Styles from '../../utils/styles';
 import { BiX, BiLogOut } from 'react-icons/bi';
+import { useDispatch, useSelector } from 'react-redux';
+import { Store } from '../../types';
+import { resetState, setAccessToken, setEventMode, setEvents, setNavBarMode, setUser, setUserMode } from '../../store/actions';
+import { useRouter } from 'next/router';
 
-function Nav({ util, events, event }) {
-  const handleSelect = (mode) => {
-    util.setMode(mode);
-    util.setNavBarMode(false);
+function NavBar() {
+  const user = useSelector((state: Store) => state.user);
+  const events = useSelector((state: Store) => state.events);
+  const activeEvent = useSelector((state: Store) => state.activeEvent);
+
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handleSelect = (component, mode) => {
+    if (component = 'user') {
+      router.push('../user/');
+      dispatch(setUserMode(mode))
+    } else if (component = 'event') {
+      router.push(`../event/${activeEvent._id}`);
+      dispatch(setEventMode(mode))
+    }
+    dispatch(setNavBarMode(false));
   }
+
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    dispatch(resetState());
+    router.push('./login');
+  };
 
   return (
     <div className='w-full h-full flex flex-col justify-between items-start p-2'>
@@ -14,13 +37,13 @@ function Nav({ util, events, event }) {
         <div className={Styles.navbarTitle}>
           <div className='font-bold'>User Options</div>
           <div className='ml-2'>
-            {'- ' + util.user.firstName + ' ' + util.user.lastName}
+            {'- ' + user.firstName + ' ' + user.lastName}
           </div>
         </div>
         <button
           className={Styles.navbarContent}
           onClick={() => {
-            handleSelect('userDashboard');
+            handleSelect('user', 'userDashboard');
           }}
         >
           Dashboard
@@ -28,7 +51,7 @@ function Nav({ util, events, event }) {
         <button
           className={Styles.navbarContent}
           onClick={() => {
-            handleSelect('userProfile');
+            handleSelect('user', 'userProfile');
           }}
         >
           My Profile
@@ -37,7 +60,7 @@ function Nav({ util, events, event }) {
           className={Styles.navbarContent}
           disabled={events.length > 0 ? false : true}
           onClick={() => {
-            handleSelect('userEvents');
+            handleSelect('user', 'userEvents');
           }}
         >
           Events
@@ -46,7 +69,7 @@ function Nav({ util, events, event }) {
           className={Styles.navbarContent}
           disabled={events.length > 0 ? false : true}
           onClick={() => {
-            handleSelect('userMyEvents');
+            handleSelect('user', 'userMyEvents');
           }}
         >
           My Events
@@ -55,7 +78,7 @@ function Nav({ util, events, event }) {
           className={Styles.navbarContent}
           disabled={events.length > 0 ? false : true}
           onClick={() => {
-            handleSelect('userCreate');
+            handleSelect('user', 'userCreate');
           }}
         >
           Create Event
@@ -64,20 +87,20 @@ function Nav({ util, events, event }) {
           className={Styles.navbarContent}
           disabled={events.length > 0 ? false : true}
           onClick={() => {
-            handleSelect('connectInviteId');
+            handleSelect('user', 'connectInviteId');
           }}
         >
           Connect Event with Invite ID
         </button>
         <div className={Styles.navbarTitle}>
           <div className='font-bold'>Event Options</div>
-          {event && <div className='ml-2'>{'- ' + event.name}</div>}
+          {activeEvent && <div className='ml-2'>{'- ' + activeEvent.name}</div>}
         </div>
-        {event ? (
+        {activeEvent ? (
           <>
             <button
               onClick={() => {
-                handleSelect('eventDashboard');
+                handleSelect('event', 'eventDashboard');
               }}
               className={Styles.navbarContent}
             >
@@ -85,7 +108,7 @@ function Nav({ util, events, event }) {
             </button>
             <button
               onClick={() => {
-                handleSelect('eventDetails');
+                handleSelect('event', 'eventDetails');
               }}
               className={Styles.navbarContent}
             >
@@ -93,7 +116,7 @@ function Nav({ util, events, event }) {
             </button>
             <button
               onClick={() => {
-                handleSelect('eventParticipants');
+                handleSelect('event', 'eventParticipants');
               }}
               className={Styles.navbarContent}
             >
@@ -101,9 +124,9 @@ function Nav({ util, events, event }) {
             </button>
             <button
               onClick={() => {
-                handleSelect('manageEvent');
+                handleSelect('event', 'manageEvent');
               }}
-              disabled={(event.organisers.includes(util.user._id)) ? false : true}
+              disabled={(activeEvent.organisers.includes(user._id)) ? false : true}
               className={Styles.navbarContent}
             >
               Manage Event
@@ -117,7 +140,7 @@ function Nav({ util, events, event }) {
         <button
           className={Styles.navbarBottom}
           onClick={() => {
-            util.setNavBarMode(false);
+            dispatch(setNavBarMode(false));
           }}
         >
           <BiX size='36px' />
@@ -126,7 +149,7 @@ function Nav({ util, events, event }) {
         <button
           className={Styles.navbarBottom + ' mb-4 border-t-4'}
           onClick={() => {
-            util.logout();
+            logout();
           }}
         >
           <BiLogOut size='30px' className='mr-2' /> Logout
@@ -136,4 +159,4 @@ function Nav({ util, events, event }) {
   );
 }
 
-export default Nav;
+export default NavBar;

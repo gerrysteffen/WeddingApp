@@ -1,6 +1,7 @@
 import React from 'react';
 
-function ManageEventComms(props) {
+function ManageEventComms() {
+  //TODO: do this
   return (
     <div>
       

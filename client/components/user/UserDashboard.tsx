@@ -1,25 +1,17 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Styles from '../../utils/styles';
-import { StateType } from '../../types';
-import { setAccessToken, setUserMode } from '../../store/actions';
-import { useRouter } from 'next/router';
+import { Store } from '../../types';
+import { setUserMode } from '../../store/actions';
 
 function UserDashboard() {
-  const user = useSelector((state: StateType) => state.user);
-  const events = useSelector((state: StateType) => state.events);
+  const user = useSelector((state: Store) => state.user);
+  const events = useSelector((state: Store) => state.events);
 
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const handleClick = (userMode: string) => {
     dispatch(setUserMode(userMode));
-  };
-
-  const logout = () => {
-    localStorage.removeItem('accessToken');
-    dispatch(setAccessToken(null));
-    router.push('./login');
   };
 
   return (
@@ -90,17 +82,6 @@ function UserDashboard() {
           }}
         >
           Connect Event with Invite ID
-        </button>
-      </div>
-      <div className={Styles.buttonContainer}>
-        <button
-          type='button'
-          onClick={() => {
-            logout();
-          }}
-          className={Styles.buttonColor}
-        >
-          Logout
         </button>
       </div>
     </>

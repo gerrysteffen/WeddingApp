@@ -43,4 +43,17 @@ export const setUserMode = (userMode: string) => ({
   type: 'SET_USER_MODE',
   payload: userMode,
 });
+export const setEventMode = (eventMode: string) => ({
+  type: 'SET_EVENT_MODE',
+  payload: eventMode,
+});
+export const setNavBarMode = (navBarMode: boolean) => ({
+  type: 'SET_NAVBAR_MODE',
+  payload: navBarMode,
+});
+export const resetState = () => ({
+  type: 'RESET_STATE',
+  payload: null,
+});
+
 

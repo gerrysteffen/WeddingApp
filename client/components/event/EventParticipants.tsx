@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Styles from '../../utils/styles';
+import { Store } from '../../types';
+import { useSelector } from 'react-redux';
 
-function EventParticipants({ event }) {
-  const [eventInvites, setEventInvites] = useState([]);
+function EventParticipants() {
+  const eventInvites = useSelector((state: Store) => state.activeEvent.invites);
   const [eventParticipants, setEventParticipants] = useState([]);
 
   useEffect(() => {
-    setEventInvites(event.invites)
-  }, []);
-
-  useEffect(() => {
-
     if (eventInvites.length>0) {
       const participants = []
       eventInvites.forEach(invite => {

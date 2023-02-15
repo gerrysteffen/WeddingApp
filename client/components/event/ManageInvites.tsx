@@ -2,12 +2,8 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Styles from '../../utils/styles';
 
-function ManageInvites({ util, event }) {
-  const [eventInvites, setEventInvites] = useState([]);
-
-  useEffect(() => {
-    setEventInvites(event.invites);
-  }, []);
+function ManageInvites() {
+  const eventInvites = useSelector((state: Store) => state.activeEvent.invites);
 
   return (
     <div>

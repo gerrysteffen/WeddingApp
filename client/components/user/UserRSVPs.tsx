@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
-import { StateType } from '../../types';
+import { Store } from '../../types';
 
 function UserRSVPs() {
-  const invites = useSelector((state: StateType) => state.user.invites);
-  const accessToken = useSelector((state: StateType) => state.accessToken);
+  const invites = useSelector((state: Store) => state.user.invites);
+  const accessToken = useSelector((state: Store) => state.accessToken);
   const [fullInvites, setFullInvites] = useState(null);
 
   useEffect(() => {

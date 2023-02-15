@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import apiCalls from '../../utils/apis/index.js';
 import Styles from '../../utils/styles.js';
 import { BiMenu } from 'react-icons/bi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setAccessToken, setUser } from '../../store/actions/index';
 
 function index() {

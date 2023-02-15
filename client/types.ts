@@ -35,11 +35,12 @@ export type ActiveEvent = {
   updatedTimestamp: Date;
   name: string;
   date: Date;
+  dateShort?: string;
   description: string;
   fiance1: User;
   fiance2: User;
   invites: Invite[];
-  organisers: string[] | User[];
+  organisers: string[];
   eventComms: Comms[];
 }
 
@@ -67,6 +68,7 @@ export type RSVP = {
 }
 
 export type Comms = {
+  _id: string;
   createdDate: Date,
   updatedDate: Date,
   event: Event;
@@ -74,17 +76,19 @@ export type Comms = {
   body: string,
 }
 
-export type AlertType = {
+export type Alert = {
   severity: string;
   message: string;
 }
 
-export type StateType = {
+export type Store = {
   accessToken: string;
   user: User | null;
   events: Event[] | null,
-  activeEvent: Event | null,
+  activeEvent: ActiveEvent | null,
+  navBarMode: boolean,
   userMode: string,
+  eventMode: string,
   activeAlert: Boolean;
-  alertContent: AlertType;
+  alertContent: Alert;
 }

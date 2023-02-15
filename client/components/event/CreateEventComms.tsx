@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setEventMode } from '../../store/actions';
+import { Store } from '../../types';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
 
-function CreateEventComms({util}) {
+function CreateEventComms() {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
+  const accessToken = useSelector((state: Store) => state.accessToken);
+  const activeEvent = useSelector((state: Store) => state.activeEvent);
+  
+  const dispatch = useDispatch();
 
   const data = {
     title,
     body,
-    event: util.activeEventId
+    event: activeEvent._id
   }
 
   const handleSubmit = async () => {
-    await apiCalls.postComm(util.accessToken, data)
-    util.setMode('manageEventComms')
+    await apiCalls.postComm(accessToken, data)
+    dispatch(setEventMode('manageEventComms'))
   }
 
   return (
@@ -25,7 +32,7 @@ function CreateEventComms({util}) {
           <label className='pl-2'>Title</label>
           <input value={title} onChange={(event)=>{setTitle(event.target.value)}} type='text' placeholder='Name of the event' className='border border-black p-2'></input>
           <label className='mt-2 pl-2'>Body</label>
-          <textarea value={body} onChange={(event)=>{setBody(event.target.value)}} rows='6' placeholder='Give it a description or tagline' className='border border-black p-2'></textarea>
+          <textarea value={body} onChange={(event)=>{setBody(event.target.value)}} rows={6} placeholder='Give it a description or tagline' className='border border-black p-2'></textarea>
         </form>
       </div>
       <div className={Styles.buttonContainer}>
