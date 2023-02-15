@@ -3,8 +3,10 @@
 import User from '../models/users.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const SECRET_KEY = 'Hello world.';
+const SECRET_KEY = process.env.token_secret_key || 'Hello world.';
 
 const getAllUsers = async (req, res) => {
   try {

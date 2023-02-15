@@ -2,11 +2,12 @@
 
 import express from 'express';
 import authMiddleware from './middlewares/auth.js';
+import conditionalAuthMiddleware from './middlewares/condAuth.js';
 
 const router = express.Router();
-
+    
 import EventController from './controllers/events.js';
-router.get('/event/:eventid', authMiddleware, EventController.getEvent);//!used
+router.get('/event/:eventid', conditionalAuthMiddleware, EventController.getEvent);//!used
 router.get('/publicevent/:eventid', EventController.getPublicEvent);//!used
 router.post('/event', authMiddleware, EventController.createEvent); //! used
 router.put('/event', authMiddleware, EventController.updateEvent);

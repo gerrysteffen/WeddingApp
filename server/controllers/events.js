@@ -59,43 +59,77 @@ const getEvents = async (req, res) => {
 const getEvent = async (req, res) => {
   try {
     const _id = req.params.eventid;
-    const event = await Event.findOne({ _id: _id })
-      // .populate('eventComms')
-      .populate([
-        {
-          path: 'invites',
-          model: 'invite',
-          populate: [
-            {
-              path: 'guests',
-              model: 'user'
-            },
-            {
-              path: 'mainGuest',
-              model: 'user',
-            },
-          ],
-        },{
-          path: 'eventComms',
-          model: 'comm'
-        }
-      ])
-    res.status(200).send(JSON.stringify(event));
+    const event = await Event.findOne({ _id: _id }).populate([
+      {
+        path: 'invites',
+        model: 'invite',
+        populate: [
+          {
+            path: 'guests',
+            model: 'user',
+          },
+          {
+            path: 'mainGuest',
+            model: 'user',
+          },
+        ],
+      },
+      {
+        path: 'eventComms',
+        model: 'comm',
+      },
+    ]);
+    console.log(event)
+    if (!event) {
+      res
+        .status(400)
+        .send(JSON.stringify({ error: '404', message: 'Event not found.', event: null }));
+    } else {
+      const guests = []
+      event.invites.forEach((invite) => {
+        invite.guests.forEach((guest) => {
+          guests.push(String(guest._id))
+        })
+      })
+      if (req.user && guests.includes(String(req.user._id))) {
+        res
+          .status(200)
+          .send(JSON.stringify({
+            error: null,
+            message: 'Event data retrieved.',
+            event: event,
+          }));
+      } else {
+        const publicEvent = await Event.findOne({ _id: _id }).populate(
+          'eventComms'
+        );
+        res
+          .status(200)
+          .send(JSON.stringify({
+            error: null,
+            message: 'Public event data retrieved.',
+            event: publicEvent,
+          }));
+      }
+    }
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
+    res
+      .status(500)
+      .send(JSON.stringify({ error: '500', message: 'Server Error.', event: null }));
   }
 };
 
 const getPublicEvent = async (req, res) => {
   try {
     const _id = req.params.eventid;
-    const event = await Event.findOne({ _id: _id })
-      .populate('eventComms')
+    const event = await Event.findOne({ _id: _id }).populate('eventComms');
     res.status(200).send(JSON.stringify(event));
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
+    res
+      .status(500)
+      .send(JSON.stringify({ error: '500', message: 'Server Error.', event: null }));
   }
 };
 
@@ -121,14 +155,37 @@ const createEvent = async (req, res) => {
     });
     event = await Event.findOneAndUpdate(
       { _id: event._id },
-      { $push: { invites: invite } }
+      { $push: { invites: invite } },
+      { new: true }
+    ).populate([
+      {
+        path: 'invites',
+        model: 'invite',
+        populate: [
+          {
+            path: 'guests',
+            model: 'user',
+          },
+          {
+            path: 'mainGuest',
+            model: 'user',
+          },
+        ],
+      },
+    ]);
+    await User.findOneAndUpdate(
+      { _id: req.user._id },
+      { $push: { invites: invite } },
+      { new: true }
     );
-    await User.updateOne({ _id: req.user._id }, { $push: { invites: invite } });
-    res.status(201);
-    res.send(JSON.stringify(event));
+    res
+      .status(201)
+      .send(JSON.stringify({ error: null, message: 'Event created.', event: event }));
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
+    res
+      .status(500)
+      .send(JSON.stringify({ error: '500', message: 'Server Error.', event: null }));
   }
 };
 
@@ -160,7 +217,9 @@ const updateEvent = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
+    res
+      .status(500)
+      .send(JSON.stringify({ error: '500', message: 'Server Error.', event: null }));
   }
 };
 
@@ -171,7 +230,9 @@ const deleteEvent = async (req, res) => {
     res.sendStatus(204);
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
+    res
+      .status(500)
+      .send(JSON.stringify({ error: '500', message: 'Server Error.', event: null }));
   }
 };
 
@@ -182,7 +243,7 @@ const EventController = {
   createEvent,
   updateEvent,
   deleteEvent,
-  getPublicEvent
+  getPublicEvent,
 };
 
 export default EventController;
