@@ -1,7 +1,8 @@
+import { User, UserInfo } from '../../types';
 import ServerURL from './serverUrl';
 
 const userAPIs = {
-  postUser: async (user) => {
+  postUser: async (user: UserInfo) => {
     const data = {
       user: {
         firstName: user.firstName,
@@ -23,11 +24,11 @@ const userAPIs = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
-  updateUser: async (accessToken, user) => {
+  updateUser: async (accessToken: string, user: User) => {
     const data = {
       user: {
         _id: user._id,
@@ -50,11 +51,11 @@ const userAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
-  changePW: async (accessToken, user, oldPassword, newPassword) => {
+  changePW: async (accessToken: string, user: User, oldPassword: string, newPassword: string) => {
     const data = {
       user: {
         _id: user._id,
@@ -70,11 +71,11 @@ const userAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
-  loginUser: async (user) => {
+  loginUser: async (user: {email: string, password: string}) => {
     const data = {
       user: {
         email: user.email,
@@ -88,20 +89,19 @@ const userAPIs = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
-  getInitialUser: async (accessToken) => {
+  getInitialUser: async (accessToken: string) => {
     const res = await fetch(ServerURL + '/user', {
       method: 'GET',
-      // credentials: 'include',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 };

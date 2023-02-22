@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Store } from '../../types';
 import Styles from '../../utils/styles';
 
 function ManageInvites() {

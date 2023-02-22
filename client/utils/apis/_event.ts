@@ -1,7 +1,8 @@
+import { EventInfo } from "../../types";
 import ServerURL from "./serverUrl";
 
 const eventAPIs = {
-  postEvent: async (accessToken, event) => {
+  postEvent: async (accessToken: string, event: EventInfo) => {
     const data = {
       event: {
         name: event.name,
@@ -17,11 +18,11 @@ const eventAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
-  getEvent: async (accessToken, eventId) => {
+  getEvent: async (accessToken: string, eventId: string) => {
     const res = await fetch(ServerURL + '/event/'+eventId, {
       method: 'GET',
       mode: 'cors',
@@ -29,20 +30,20 @@ const eventAPIs = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;;
     return res.json();
   },
 
-  getPublicEvent: async (eventId) => {
-    const res = await fetch(ServerURL + '/publicevent/'+eventId, {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).catch((error) => console.log(error));
-    return res.json();
-  },
+  // getPublicEvent: async (eventId) => {
+  //   const res = await fetch(ServerURL + '/publicevent/'+eventId, {
+  //     method: 'GET',
+  //     mode: 'cors',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   }).catch((error) => console.log(error)) as Response;;
+  //   return res.json();
+  // },
   
   getEvents: async (accessToken) => {
     const res = await fetch(ServerURL + '/events', {
@@ -52,7 +53,7 @@ const eventAPIs = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;;
     return res.json();
   },
 
@@ -64,7 +65,7 @@ const eventAPIs = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;;
     return res.json();
   },
 
@@ -86,7 +87,7 @@ const eventAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;;
     return res.json();
   },
 };

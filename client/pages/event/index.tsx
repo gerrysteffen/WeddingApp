@@ -24,23 +24,17 @@ function EventIndex({ eventid }) {
   const accessToken = useSelector((state: Store) => state.accessToken);
   const user = useSelector((state: Store) => state.user);
   const activeEvent = useSelector((state: Store) => state.activeEvent);
+  const eventMode = useSelector((state: Store) => state.eventMode);
   const navBarMode = useSelector((state: Store) => state.navBarMode);
   let loading = true;
   const [event, setEvent] = useState(null);
-  const [mode, setMode] = useState('eventPage');
 
   const dispatch = useDispatch();
-
-  const util = {
-    accessToken: accessToken,
-    user: user,
-    setMode: setMode,
-  };
 
   useEffect(() => {
     const getPublicEventInfo = async () => {
       if (eventid !== activeEvent._id) {
-        const res = await apiCalls.getEvent(eventid);
+        const res = await apiCalls.getEvent(eventid, accessToken);
         if (res.error) {
           //TODO: propper message handling
           console.log(res.message);
@@ -65,16 +59,16 @@ function EventIndex({ eventid }) {
         <Step0 eventid={eventid} setEvent={setEvent} />
       ) : (
         <>
-          {mode === 'eventDashboard' && <EventDashboard />}
-          {mode === 'eventDetails' && <EventDetails />}
-          {mode === 'eventParticipants' && <EventParticipants />}
-          {mode === 'manageEvent' && <ManageEvent />}
-          {mode === 'manageEventDetails' && <ManageEventDetails />}
-          {mode === 'manageParticipants' && <ManageParticipants />}
-          {mode === 'createEventInvites' && <InviteUsers />}
-          {mode === 'manageEventInvites' && <ManageInvites />}
-          {mode === 'createEventComms' && <CreateEventComms />}
-          {mode === 'manageEventComms' && <ManageEventComms />}
+          {eventMode === 'eventDashboard' && <EventDashboard />}
+          {eventMode === 'eventDetails' && <EventDetails />}
+          {eventMode === 'eventParticipants' && <EventParticipants />}
+          {eventMode === 'manageEvent' && <ManageEvent />}
+          {eventMode === 'manageEventDetails' && <ManageEventDetails />}
+          {eventMode === 'manageParticipants' && <ManageParticipants />}
+          {eventMode === 'createEventInvites' && <InviteUsers />}
+          {eventMode === 'manageEventInvites' && <ManageInvites />}
+          {eventMode === 'createEventComms' && <CreateEventComms />}
+          {eventMode === 'manageEventComms' && <ManageEventComms />}
         </>
       )}
       {navBarMode && (

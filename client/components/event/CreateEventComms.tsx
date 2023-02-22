@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventMode } from '../../store/actions';
-import { Store } from '../../types';
+import { CommsInfo, Store } from '../../types';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
 
@@ -13,7 +13,7 @@ function CreateEventComms() {
   
   const dispatch = useDispatch();
 
-  const data = {
+  const data: CommsInfo = {
     title,
     body,
     event: activeEvent._id

@@ -24,7 +24,7 @@ const inviteAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
@@ -35,7 +35,7 @@ const inviteAPIs = {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
@@ -56,7 +56,7 @@ const inviteAPIs = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 
@@ -72,7 +72,7 @@ const inviteAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 

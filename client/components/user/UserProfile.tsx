@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import apiCalls from '../../utils/apis';
 import Styles from '../../utils/styles';
-import { StateType } from '../../types';
+import { Store } from '../../types';
 import { setUser } from '../../store/actions';
 
 function UserProfile() {
-  const user = useSelector((state: StateType) => state.user);
-  const accessToken = useSelector((state: StateType) => state.accessToken);
+  const user = useSelector((state: Store) => state.user);
+  const accessToken = useSelector((state: Store) => state.accessToken);
 
   const [userInfo, setUserInfo] = useState({...user});
   const [editMode, setEditMode] = useState(false);

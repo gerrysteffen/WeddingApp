@@ -2,7 +2,7 @@ import React from 'react';
 import RegIndex from '.';
 import { useRouter } from 'next/router'
 
-function Userid(props) {
+function Userid() {
   const router = useRouter()
   const { userid } = router.query
 

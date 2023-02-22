@@ -1,7 +1,8 @@
+import { CommsInfo } from "../../types";
 import ServerURL from "./serverUrl";
 
 const commsAPIs = {
-  postComm: async (accessToken, comm) => {
+  postComm: async (accessToken: string, comm: CommsInfo) => {
     const data = {
       comm: {
         title: comm.title,
@@ -17,7 +18,7 @@ const commsAPIs = {
         Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.log(error));
+    }).catch((error) => console.log(error)) as Response;
     return res.json();
   },
 }

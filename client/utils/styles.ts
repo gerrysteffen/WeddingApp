@@ -1,4 +1,3 @@
-
 const Styles = {
   landingPageTitle: 'text-72px mx-6 italic hover:text-slate-600 hover:ml-8',
   title: 'absolute top-12 left-6 text-36px',
@@ -13,6 +12,5 @@ const Styles = {
   navbarNoContent: 'border-black border-b-2 w-full h-12 text-start align-middle pl-2 flex flex-col justify-center italic',
   navbarBottom: 'border-black border-t-2 w-full h-12 text-start align-middle pl-2 flex flex-row items-center',
 }
-
 
 export default Styles

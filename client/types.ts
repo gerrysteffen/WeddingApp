@@ -15,6 +15,19 @@ export type User = {
   invites: Invite[];
 }
 
+export type UserInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
+}
+
 export type Event = {
   _id: string;
   createdTimestamp: Date;
@@ -44,6 +57,12 @@ export type ActiveEvent = {
   eventComms: Comms[];
 }
 
+export type EventInfo = {
+  name: string;
+  date: string;
+  description: string;
+}
+
 export type Invite = {
   _id: string;
   event: Event;
@@ -71,7 +90,13 @@ export type Comms = {
   _id: string;
   createdDate: Date,
   updatedDate: Date,
-  event: Event;
+  event: string;
+  title: string,
+  body: string,
+}
+
+export type CommsInfo = {
+  event: string;
   title: string,
   body: string,
 }
@@ -91,4 +116,12 @@ export type Store = {
   eventMode: string,
   activeAlert: Boolean;
   alertContent: Alert;
+}
+
+export type Response = {
+  error: string | null,
+  message: string,
+  event?: Event,
+  events?: Event[],
+  user?: User,
 }

@@ -8,7 +8,7 @@ The aim of the app is to simplify event creation and guest management while prov
 
 Current apps that manage RSVPs and provide social engagement opportunities often have limitations, such as being tied to specific social networks or not offering user data ownership. The Wedding App aims to provide a more efficient solution for event organization and will include gamification elements to encourage platform use.
 
-## Features
+## Features
 
 The final product will feature:
 - Event management and communication tools
