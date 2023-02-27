@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { BiUser, BiArrowBack, BiMenu, BiX } from 'react-icons/bi';
+import { BiArrowBack, BiMenu, BiX } from 'react-icons/bi';
 import apiCalls from '../../utils/apis/index';
 import UserDashboard from '../../components/user/UserDashboard';
 import UserProfile from '../../components/user/UserProfile';

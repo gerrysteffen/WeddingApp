@@ -63,6 +63,7 @@ function EventIndex({ eventid }) {
           {eventMode === 'eventDetails' && <EventDetails />}
           {eventMode === 'eventParticipants' && <EventParticipants />}
           {eventMode === 'manageEvent' && <ManageEvent />}
+          {/* below as children of manage event? */}
           {eventMode === 'manageEventDetails' && <ManageEventDetails />}
           {eventMode === 'manageParticipants' && <ManageParticipants />}
           {eventMode === 'createEventInvites' && <InviteUsers />}
