@@ -17,6 +17,14 @@ The final product will feature:
 - Photo and video upload options
 - Gamification elements to encourage user engagement
 
+## Tech Stack
+
+- Next.js - Front-end framework
+- TailwindCSS - Front-end design
+- JWT: Authendtication and authorization
+- Express.js - Back-end framework
+- Mongoose/MongoDB - Back-end data base
+
 ## Contact Information
 
 For questions or feedback, please feel free to reach out to @gerrysteffen.
